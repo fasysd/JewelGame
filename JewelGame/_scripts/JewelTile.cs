@@ -8,17 +8,8 @@ namespace Project_JewelGame._Scripts
     public partial class JewelTile : PictureBox
     {
         static private Random random = new Random();
-        static private Image[] _images = new Image[]
-        {
-            Image.FromFile(Path.Combine(Application.StartupPath, "..\\..\\Resources\\Sprite-0001.png")),
-            Image.FromFile(Path.Combine(Application.StartupPath, "..\\..\\Resources\\Sprite-0002.png")),
-            Image.FromFile(Path.Combine(Application.StartupPath, "..\\..\\Resources\\Sprite-0003.png")),
-            Image.FromFile(Path.Combine(Application.StartupPath, "..\\..\\Resources\\Sprite-0004.png")),
-            Image.FromFile(Path.Combine(Application.StartupPath, "..\\..\\Resources\\Sprite-0005.png")),
-            Image.FromFile(Path.Combine(Application.StartupPath, "..\\..\\Resources\\Sprite-0006.png")),
-        };
+        static public Image[] _images;
         static public int _GetRandomType() => random.Next(_images.Length);
-
 
         public int X { get; private set; }
         public int Y { get; private set; }
@@ -26,6 +17,18 @@ namespace Project_JewelGame._Scripts
 
         private int _emptyType = _images.Length;
 
+        static JewelTile()
+        {
+            string basePath = Path.Combine(Application.StartupPath, "..\\..\\Resources");
+            _images = new Image[6];
+            for (int i = 0; i < 6; i++)
+            {
+                string path = Path.Combine(basePath, $"Sprite-000{i + 1}.png");
+                if (!File.Exists(path))
+                    throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
+                _images[i] = Image.FromFile(path);
+            }
+        }
         public JewelTile(int X, int Y, int Size, int Type, EventHandler Click)
         {
             this.BorderStyle = BorderStyle.FixedSingle;
@@ -38,6 +41,14 @@ namespace Project_JewelGame._Scripts
             this.Click += Click;
         }
 
+        public void _AdjacentTile()
+        {
+            this.BackColor = Color.Orange;
+        }
+        public void _NonAdjacentTile()
+        {
+            this.BackColor = Color.Transparent;
+        }
         public void _SelectTile()
         {
             this.BackColor = Color.Yellow;
@@ -89,10 +100,7 @@ namespace Project_JewelGame._Scripts
         }
         public void _SwapType_And_Render(JewelTile jewelTile)
         {
-            int oldType = this.Type;
-
-            this._SetType(jewelTile.Type);
-            jewelTile._SetType(oldType);
+            this._SwapType(jewelTile);
 
             this._Render();
             jewelTile._Render();

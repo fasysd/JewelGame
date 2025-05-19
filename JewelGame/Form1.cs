@@ -1,16 +1,5 @@
 ﻿using Project_JewelGame._Scripts;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Project_JewelGame
 {
@@ -20,7 +9,8 @@ namespace Project_JewelGame
         public Form1()
         {
             InitializeComponent();
-            jewelGrid = new JewelGrid(this);
+            jewelGrid = new JewelGrid( this);
+            //this.Controls.Add(jewelGrid._TableLayoutPanel);
         }
 
     }

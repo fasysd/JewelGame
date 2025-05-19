@@ -36,7 +36,7 @@
             this.textBox_point.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_point.AutoSize = true;
             this.textBox_point.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_point.Location = new System.Drawing.Point(746, 119);
+            this.textBox_point.Location = new System.Drawing.Point(905, 119);
             this.textBox_point.Name = "textBox_point";
             this.textBox_point.Size = new System.Drawing.Size(42, 46);
             this.textBox_point.TabIndex = 0;
@@ -46,7 +46,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 614);
+            this.ClientSize = new System.Drawing.Size(959, 719);
             this.Controls.Add(this.textBox_point);
             this.Name = "Form1";
             this.Text = "Form1";
