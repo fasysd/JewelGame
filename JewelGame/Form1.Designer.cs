@@ -28,36 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox_point = new System.Windows.Forms.Label();
+            this.panel_JewelGrid = new System.Windows.Forms.Panel();
+            this.button_saveGame = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // textBox_point
+            // panel_JewelGrid
             // 
-            this.textBox_point.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_point.AutoSize = true;
-            this.textBox_point.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_point.Location = new System.Drawing.Point(905, 119);
-            this.textBox_point.Name = "textBox_point";
-            this.textBox_point.Size = new System.Drawing.Size(42, 46);
-            this.textBox_point.TabIndex = 0;
-            this.textBox_point.Text = "0";
+            this.panel_JewelGrid.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.panel_JewelGrid.Location = new System.Drawing.Point(171, 12);
+            this.panel_JewelGrid.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_JewelGrid.Name = "panel_JewelGrid";
+            this.panel_JewelGrid.Size = new System.Drawing.Size(500, 500);
+            this.panel_JewelGrid.TabIndex = 0;
+            // 
+            // button_saveGame
+            // 
+            this.button_saveGame.Location = new System.Drawing.Point(749, 125);
+            this.button_saveGame.Name = "button_saveGame";
+            this.button_saveGame.Size = new System.Drawing.Size(75, 23);
+            this.button_saveGame.TabIndex = 1;
+            this.button_saveGame.Text = "Save Game";
+            this.button_saveGame.UseVisualStyleBackColor = true;
+            this.button_saveGame.Click += new System.EventHandler(this.button_saveGame_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(959, 719);
-            this.Controls.Add(this.textBox_point);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(880, 541);
+            this.Controls.Add(this.button_saveGame);
+            this.Controls.Add(this.panel_JewelGrid);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "GAME BEJEWELED";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label textBox_point;
+        private System.Windows.Forms.Panel panel_JewelGrid;
+        private System.Windows.Forms.Button button_saveGame;
     }
 }
 
