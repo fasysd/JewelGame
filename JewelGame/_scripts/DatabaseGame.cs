@@ -89,7 +89,7 @@ namespace JewelGame._Scripts
 
             return result;
         }
-        public static void InsertData(Data_tranDau newData, DataTable newJewels)
+        public static Data_tranDau InsertData(Data_tranDau newData, DataTable newJewels)
         {
             string query_tranDau = @"INSERT INTO dbo.TranDau ( thoiGian, kichCo,
                                         tenNguoiChoi1, hpNguoiChoi1, giapNguoiChoi1, noNguoiChoi1, nangLuongNguoiChoi1,
@@ -129,6 +129,7 @@ namespace JewelGame._Scripts
                         cmd.Parameters.AddWithValue("@nangLuongNguoiChoi2", newData.nangLuongNguoiChoi2);
 
                         maTranDauMoiTao = (int)cmd.ExecuteScalar(); // Lấy khóa chính được sinh ra
+                        newData.maTranDau = maTranDauMoiTao;
                     }
 
                     foreach (DataRow dataRow in newJewels.Rows)
@@ -149,6 +150,7 @@ namespace JewelGame._Scripts
             {
                 MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
             }
+            return newData;
         }
         public static void UpdateData(Data_tranDau newData, DataTable newJewels)
         {

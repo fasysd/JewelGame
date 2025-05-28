@@ -23,26 +23,8 @@ namespace JewelGame
 
         private void button_saveGame_Click(object sender, EventArgs e)
         {
-            DatabaseGame.InsertData(newData: new DatabaseGame.Data_tranDau
-            {
-                kichCo = jewelGrid._GridCount,
-                thoiGian = 0,
 
-                tenNguoiChoi1 = "Player_test1",
-                hpNguoiChoi1 = 50,
-                giapNguoiChoi1 = 29,
-                noNguoiChoi1 = 43,
-                nangLuongNguoiChoi1 = 54,
-
-                tenNguoiChoi2 = "Player_test2",
-                hpNguoiChoi2 = 50,
-                giapNguoiChoi2 = 29,
-                noNguoiChoi2 = 43,
-                nangLuongNguoiChoi2 = 54,
-            }, newJewels: jewelGrid._GetDataTable_Jewels());
-
-            //Cập nhật Data cho trận đấu vừa chọn
-            //DatabaseGame.UpdateData(DatabaseGame.GetData_TranDau(currenTRanDau), jewelGrid._GetDataTable_Jewels());
+            DatabaseGame.UpdateData(DatabaseGame.GetData_TranDau(currenTRanDau), jewelGrid._GetDataTable_Jewels());
 
             _setDataSoure();
         }
@@ -61,6 +43,7 @@ namespace JewelGame
             _setDataSoure();
 
             currenTRanDau = maTranDauDuocChon;
+            textBox_tranDauHienTai.Text = "Mã tran đấu hiện tại: " + currenTRanDau.ToString();
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -77,6 +60,34 @@ namespace JewelGame
         private void _setDataSoure()
         {
             dataGridView1.DataSource = DatabaseGame.GetDataTable_ListTranDau().DefaultView.ToTable(false, "maTranDau", "tenNguoiChoi1", "tenNguoiChoi2", "kichCo", "thoiGian");
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            currenTRanDau = DatabaseGame.InsertData(newData: new DatabaseGame.Data_tranDau
+            {
+                kichCo = jewelGrid._GridCount,
+                thoiGian = 0,
+
+                tenNguoiChoi1 = "Player_test1",
+                hpNguoiChoi1 = 50,
+                giapNguoiChoi1 = 29,
+                noNguoiChoi1 = 43,
+                nangLuongNguoiChoi1 = 54,
+
+                tenNguoiChoi2 = "Player_test2",
+                hpNguoiChoi2 = 50,
+                giapNguoiChoi2 = 29,
+                noNguoiChoi2 = 43,
+                nangLuongNguoiChoi2 = 54,
+            }, newJewels: jewelGrid._GetDataTable_Jewels()).maTranDau;
+
+            panel_JewelGrid.Controls.Remove(jewelGrid);
+            jewelGrid = new JewelGrid(GridCount: 10, DatabaseGame.GetDataTable_Jewels(currenTRanDau));
+            panel_JewelGrid.Controls.Add(jewelGrid);
+
+            _setDataSoure();
+            textBox_tranDauHienTai.Text = "Mã tran đấu hiện tại: " + currenTRanDau.ToString();
         }
     }
 }
