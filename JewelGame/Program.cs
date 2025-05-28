@@ -16,7 +16,7 @@ namespace JewelGame
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Project_JewelGame.Form1());
+            Application.Run(new Form1());
         }
     }
 }

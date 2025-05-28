@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
@@ -10,12 +11,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace Project_JewelGame._Scripts
+namespace JewelGame._Scripts
 {
     public partial class JewelGrid: TableLayoutPanel
     {
+        //-----------------------------------------------------------------------------
+        public int _GridCount => this._gridCount;
         public event Action _OnStartTurn;
         public event Action<int[]> _OnEndTurn;
+        //-----------------------------------------------------------------------------
         //-
         //Dữ liệu bảng jewel
         private int _gridCount;//kích thước bàn cờ
@@ -24,21 +28,21 @@ namespace Project_JewelGame._Scripts
         //Dữ liệu tạm thời bảng jewel
         private JewelTile _firstJewel = null;//ô Jewel được chọn số 1
         private bool _canInteract = true;//trạng thái có thể swap các ô Jewel
+        //-----------------------------------------------------------------------------
 
-        public JewelGrid( int GridCount = 10)
+        public JewelGrid( int GridCount)
         {
             _gridCount = GridCount;
             _grid = new JewelTile[_gridCount, _gridCount];
 
             this.RowCount = _gridCount;
             this.ColumnCount = _gridCount;
-            this.Dock = DockStyle.Fill;
             for (int i = 0; i < _gridCount; i++)
             {
                 this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
                 this.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             }
-            
+            _setAutoSize();
 
             for (int rowX = 0; rowX < _gridCount; rowX++)
             {
@@ -49,98 +53,88 @@ namespace Project_JewelGame._Scripts
                         Point = new Point( rowX, columnY ),
                         Type = JewelTile._GetRandomType(),
                     };
+                    tile._Render();
                     tile.Click += _clickJewel;
                     tile.DoubleClick += _doubleClickJewel;
-                    tile._Render();
 
                     _grid[tile.X, tile.Y] = tile;
                     this.Controls.Add(tile, tile.X, tile.Y);
                 }
             }
 
-            _canInteract = false;// không thế tương tác với bảng
             _resolveJewelGrid(). //Xử lý bảng
-                ContinueWith(task =>
-                {
-                    //Kết thúc lượt
-                    _canInteract = true; // Có thể tương tác lại với bảng
-                });
+                ContinueWith(task =>{});
         }
-        public JewelGrid( List<DatabaseGame.Data_jewel> Jewels)
+        public JewelGrid(int GridCount, DataTable Jewels)
         {
-            _gridCount = Convert.ToInt32(Math.Sqrt(Jewels.Count));
+            _gridCount = GridCount;
             _grid = new JewelTile[_gridCount, _gridCount];
 
             this.RowCount = _gridCount;
             this.ColumnCount = _gridCount;
-            this.Dock = DockStyle.Fill;
             for (int i = 0; i < _gridCount; i++)
             {
                 this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
                 this.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             }
-            foreach (var item in Jewels)
-            {
-                if( item.toaDoX < _gridCount && item.toaDoY < _gridCount && _grid[ item.toaDoX, item.toaDoY] == null)
-                {
-                    JewelTile tile = new JewelTile
-                    {
-                        Point = new Point(item.toaDoX, item.toaDoY),
-                        Type = item.loaiJewel,
-                    };
-                    tile.Click += _clickJewel;
-                    tile.DoubleClick += _doubleClickJewel;
-                    tile._Render();
+            _setAutoSize();
 
-                    _grid[tile.X, tile.Y] = tile;
-                    this.Controls.Add(tile, tile.X, tile.Y);
-                }
-                else MessageBox.Show("Dữ liệu bị lỗi");
-            }
             for (int rowX = 0; rowX < _gridCount; rowX++)
             {
                 for (int columnY = 0; columnY < _gridCount; columnY++)
                 {
-                    if (_grid[rowX, columnY] == null)
+                    JewelTile tile = new JewelTile
                     {
-                        JewelTile tile = new JewelTile
-                        {
-                            Point = new Point(rowX, columnY),
-                            Type = JewelTile._emptyType,
-                        };
-                        tile.Click += _clickJewel;
-                        tile.DoubleClick += _doubleClickJewel;
-                        tile._Render();
+                        Point = new Point(rowX, columnY),
+                        Type = JewelTile._EmptyType,
+                    };
+                    tile._Render();
+                    tile.Click += _clickJewel;
+                    tile.DoubleClick += _doubleClickJewel;
 
-                        _grid[tile.X, tile.Y] = tile;
-                        this.Controls.Add(tile, tile.X, tile.Y);
-                        
-                        MessageBox.Show("Dữ liệu bị lỗi");
-                    }
+                    _grid[tile.X, tile.Y] = tile;
+                    this.Controls.Add(tile, tile.X, tile.Y);
                 }
             }
-            _canInteract = false;// không thế tương tác với bảng
-            _resolveJewelGrid(). //Xử lý bảng
-                ContinueWith(task =>
+            try
+            {
+                var rows = Jewels.Rows;
+                for ( int i = 0; i < rows.Count; i++)
                 {
-                    _canInteract = true; // Có thể tương tác lại với bảng
-                });
+                    int toaDoX = Convert.ToInt32(rows[i]["toaDoX"]);
+                    int toaDoY = Convert.ToInt32(rows[i]["toaDoY"]);
+                    int loaiJewel = Convert.ToInt32(rows[i]["loaiJewel"]);
+
+                    _grid[toaDoX, toaDoY]._SetType(loaiJewel);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi đọc dữ liệu từ DataTable: " + ex.Message);
+            }
+
+            _resolveJewelGrid(). //Xử lý bảng
+                ContinueWith(task => { });
         }
-        public List<DatabaseGame.Data_jewel> _GetData_Jewels()
+        //-----------------------------------------------------------------------------
+        public DataTable _GetDataTable_Jewels()
         {
-            var result = new List<DatabaseGame.Data_jewel>();
+            var result = new DataTable();
+            result.Columns.Add("toaDoX", typeof(int));
+            result.Columns.Add("toaDoY", typeof(int));
+            result.Columns.Add("loaiJewel", typeof(int));
             foreach (var item in _grid)
             {
-                result.Add( new DatabaseGame.Data_jewel
-                {
-                    toaDoX = item.X,
-                    toaDoY = item.Y,
-                    loaiJewel = item.Type,
-                });
+                var newRow = result.NewRow();
+                newRow["toaDoX"] = item.X;
+                newRow["toaDoY"] = item.Y;
+                newRow["loaiJewel"] = item.Type;
+                result.Rows.Add(newRow);
             }
             return result;
         }
-
+        //-----------------------------------------------------------------------------
         private void _clickJewel(object sender, EventArgs e)
         {
             JewelTile clickTile = sender as JewelTile;
@@ -161,7 +155,7 @@ namespace Project_JewelGame._Scripts
                 JewelTile secondTile = clickTile;
                 if (_firstJewel._IsAdjacent(secondTile))//Kiểm tra liền kề
                 {
-                    _firstJewel._SwapType_And_Render(secondTile);//Đổi vị trí
+                    _firstJewel._SwapType(secondTile);//Đổi vị trí
 
                     _OnStartTurn?.Invoke();//Bắt đầu lượt
                     _canInteract = false;// không thế tương tác với bảng
@@ -192,10 +186,13 @@ namespace Project_JewelGame._Scripts
             formXemThongTinJewel._SetJewelTile(clickTile);
             formXemThongTinJewel.ShowDialog();
         }
-
+        //-----------------------------------------------------------------------------
         private async Task<int[]> _resolveJewelGrid()//Xử lý bảng
         {
-            int[] result = new int[JewelTile._images.Length];//index là Type của jewel, value là số lượng jewel loại index thu thập được
+            //Bắt đầu lượt
+            _canInteract = false;// không thế tương tác với bảng
+
+            int[] result = new int[ JewelTile._NumberOftype];//index là Type của jewel, value là số lượng jewel loại index thu thập được
             List<JewelTile> listPoints = _findMatches();// danh sách bộ ba tìm được
             while (listPoints.Count > 0)//Có bộ 3
             {
@@ -204,15 +201,17 @@ namespace Project_JewelGame._Scripts
                     result[item.Type] += 1;
                     item._SetEmpty();
                 }
-                _renderJewelGrid();
-
-                while (_updateJewelGrid() != 0)//Lặp lại đến khi các ô bị đẩy xuống hết và không còn ô trống
+                do
                 {
-                    _renderJewelGrid();
-                    await Task.Delay( 200);
+                    await Task.Delay(200);
                 }
+                while (_updateJewelGrid() != 0);//Lặp lại đến khi các ô bị đẩy xuống hết và không còn ô trống
+
                 listPoints = _findMatches();//Kiểm tra bộ 3 lại lần nữa
             }
+
+            //Kết thúc lượt
+            _canInteract = true; // Có thể tương tác lại với bảng
             return result;
         }
 
@@ -266,13 +265,36 @@ namespace Project_JewelGame._Scripts
             }
             return numberOfBlackTiles;
         }
-
-        private void _renderJewelGrid()//Cập nhật lại toàn phần hiển thị
+        //-----------------------------------------------------------------------------
+        private void _setAutoSize()
         {
-            foreach (var item in _grid)
+            this.ParentChanged += (sender, e) =>
             {
-                item._Render();
-            }
+                if (this.Parent != null)
+                {
+                    //Căn chỉnh size hình vuông khi form thay đổi kích cỡ
+                    this.Size = this.Parent.Height > this.Parent.Width
+                        ? new Size(this.Parent.Width, this.Parent.Width)
+                        : new Size(this.Parent.Height, this.Parent.Height);
+
+                    this.Location = new Point(
+                        (this.Parent.Width - this.Width) / 2,
+                        (this.Parent.Size.Height - this.Height) / 2
+                        );
+
+                    this.Parent.SizeChanged += (sender_, e_) =>
+                    {
+                        this.Size = this.Parent.Height > this.Parent.Width
+                            ? new Size(this.Parent.Width, this.Parent.Width)
+                            : new Size(this.Parent.Height, this.Parent.Height);
+
+                        this.Location = new Point(
+                            (this.Parent.Width - this.Width) / 2,
+                            (this.Parent.Size.Height - this.Height) / 2
+                            );
+                    };
+                }
+            };
         }
     }
 }

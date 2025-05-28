@@ -3,79 +3,144 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Project_JewelGame._Scripts
+namespace JewelGame._Scripts
 {
+    public class Animation_JewelTile
+    {
+        static private Timer _animationTimer;
+        static private int timer;
+
+        static public Image[,] _Image_Jewels;
+        static public Image[,] _Image_Outline;
+
+        public JewelTile _JewelTile { get; set; }
+        static Animation_JewelTile()
+        {
+            timer = 0;
+            _animationTimer = new Timer();
+            _animationTimer.Interval = 100;
+            _animationTimer.Tick += (object sender, EventArgs e) =>
+            {
+                timer += 1;
+            };
+            _animationTimer.Start();
+
+            string basePath_ImageOutline1 = Path.Combine(Application.StartupPath, "..\\..\\Resources\\animation_Outline1");
+            _Image_Outline = new Image[2,4];
+            for (int i = 0; i < 4; i++)
+            {
+                string path = Path.Combine(basePath_ImageOutline1, $"SpriteOutline_1_{i + 1}.png");
+                if (!File.Exists(path))
+                    throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
+                _Image_Outline[0, i] = Image.FromFile(path);
+            }
+
+            string basePath_ImageOutline2 = Path.Combine(Application.StartupPath, "..\\..\\Resources\\animation_Outline2");
+            for (int i = 0; i < 4; i++)
+            {
+                string path = Path.Combine(basePath_ImageOutline2, $"SpriteOutline_2_{i + 1}.png");
+                if (!File.Exists(path))
+                    throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
+                _Image_Outline[1, i] = Image.FromFile(path);
+            }
+
+            string basePath_ImageJewel = Path.Combine(Application.StartupPath, "..\\..\\Resources");
+            _Image_Jewels = new Image[JewelTile._NumberOftype, 1];
+            for (int i = 0; i < JewelTile._NumberOftype; i++)
+            {
+                for (int j = 0; j < 1; j++)
+                {
+                    string path = Path.Combine(basePath_ImageJewel, $"SpriteJewel_{i + 1}.png");
+                    if (!File.Exists(path))
+                        throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
+                    _Image_Jewels[i, j] = Image.FromFile(path);
+                }
+            }
+        }
+        public Animation_JewelTile( JewelTile JewelTile)
+        {
+            _JewelTile = JewelTile;
+        }
+        //-----------------------------------------------------------------------------
+        public void _Set_TypeJewel( int type)
+        {
+            _JewelTile.Image = type == JewelTile._EmptyType ? null : _Image_Jewels[type, 0];
+        }
+        //-----------------------------------------------------------------------------
+        public void _Set_SelectTile()
+        {
+            _JewelTile.BackgroundImage = _Image_Outline[0, timer % 4];
+            _animationTimer.Tick += _animation_SelectTile;
+        }
+        public void _Unset_SelectTile()
+        {
+            _animationTimer.Tick -= _animation_SelectTile;
+            _JewelTile.BackgroundImage = null;
+        }
+        private void _animation_SelectTile(object sender, EventArgs e)
+        {
+            _JewelTile.BackgroundImage = _Image_Outline[0, timer % 4];
+        }
+
+        //-----------------------------------------------------------------------------
+        public void _Set_AdjacentTile()
+        {
+            _JewelTile.BackgroundImage = _Image_Outline[1, timer % 4];
+            _animationTimer.Tick += _animation_AdjacentTile;
+        }
+        public void _Unset_AdjacentTile()
+        {
+            _animationTimer.Tick -= _animation_AdjacentTile;
+            _JewelTile.BackgroundImage = null;
+        }
+        private void _animation_AdjacentTile(object sender, EventArgs e)
+        {
+            _JewelTile.BackgroundImage = _Image_Outline[1, timer % 4];
+        }
+        //-----------------------------------------------------------------------------
+    }
     public partial class JewelTile : PictureBox
     {
-        static private Random random = new Random();
-        static public Image[] _images;
-        static public Image[] _images_oulineBackgrout;
-        public static int _emptyType;
-        static public int _GetRandomType() => random.Next(_images.Length);
-
+        static private Random _random = new Random();
+        //-----------------------------------------------------------------------------
+        static public int _NumberOftype = 5;
+        static public int _EmptyType = _NumberOftype;
+        static public int _GetRandomType() => _random.Next(_NumberOftype);
+        //-----------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------
         public Point Point;
         public int X => Point.X;
         public int Y => Point.Y;
         public int Type;
+        //-----------------------------------------------------------------------------
+        private Animation_JewelTile _animation;
 
-
-        static JewelTile()
-        {
-            string basePath = Path.Combine(Application.StartupPath, "..\\..\\Resources");
-
-            _images = new Image[6];
-            for (int i = 0; i < _images.Length; i++)
-            {
-                string path = Path.Combine(basePath, $"Sprite-000{i + 1}.png");
-                if (!File.Exists(path))
-                    throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
-                _images[i] = Image.FromFile(path);
-            }
-
-            _images_oulineBackgrout = new Image[4];
-            for (int i = 0; i < _images_oulineBackgrout.Length; i++)
-            {
-                string path = Path.Combine(basePath, $"Sprite-Outline-000{i + 1}-sheet.png");
-                if (!File.Exists(path))
-                    throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
-                _images_oulineBackgrout[i] = Image.FromFile(path);
-            }
-            _emptyType = _images.Length;
-        }
         public JewelTile()
         {
+            this.DoubleBuffered = true;
             this.Name = "PictureBox_JewelTile_" + X + "/" + Y;
             this.BorderStyle = BorderStyle.FixedSingle;
             this.Dock = DockStyle.Fill;
             this.Margin = new Padding(0);
             this.SizeMode = PictureBoxSizeMode.StretchImage;
             this.BackgroundImageLayout = ImageLayout.Stretch;
-        }
 
-        public void _AdjacentTile()
-        {
-            this.BackgroundImage = _images_oulineBackgrout[3];
+            _animation = new Animation_JewelTile(this);
         }
-        public void _NonAdjacentTile()
+        //-----------------------------------------------------------------------------
+        public void _AdjacentTile() => _animation._Set_AdjacentTile();
+        public void _NonAdjacentTile() => _animation._Unset_AdjacentTile();
+        //-----------------------------------------------------------------------------
+        public void _SelectTile() => _animation._Set_SelectTile();
+        public void _DeselectTile() => _animation._Unset_SelectTile();
+        //-----------------------------------------------------------------------------
+        public void _SetEmpty() => this._SetType(_EmptyType);
+        public void _SetType(int newType)
         {
-            this.BackgroundImage = null;
+            this.Type = newType;
+            _animation._Set_TypeJewel(this.Type);
         }
-        public void _SelectTile()
-        {
-            this.BackgroundImage = _images_oulineBackgrout[2];
-        }
-        public void _DeselectTile()
-        {
-            this.BackgroundImage = null;
-        }
-        public void _SetEmpty() => this.Type = _emptyType;
-        public void _SetType(int newType) => this.Type = newType;
-        public void _Render()
-        {
-            this.Image = this._IsEmpty()
-                ? null
-                : _images[this.Type];
-        }
+        //-----------------------------------------------------------------------------
         public bool _IsAdjacent(JewelTile jewelTile)
         {
             int dx = Math.Abs(this.X - jewelTile.X);
@@ -83,32 +148,15 @@ namespace Project_JewelGame._Scripts
             return (dx + dy == 1);
         }
         public bool _IsType(int type) => this.Type == type;
+        public bool _IsEmpty() => this.Type == _EmptyType;
+        //-----------------------------------------------------------------------------
         public void _SwapType(JewelTile jewelTile)
         {
             int oldType = this.Type;
-
             this._SetType(jewelTile.Type);
             jewelTile._SetType(oldType);
         }
-        public bool _IsEmpty() => this.Type == _emptyType;
-
-
-        public void _SetEmpty_And_Render()
-        {
-            _SetEmpty();
-            _Render();
-        }
-        public void _SetType_And_Render(int newType)
-        {
-            _SetType(newType);
-            _Render();
-        }
-        public void _SwapType_And_Render(JewelTile jewelTile)
-        {
-            this._SwapType(jewelTile);
-
-            this._Render();
-            jewelTile._Render();
-        }
+        public void _Render() => _animation._Set_TypeJewel(this.Type);
+        //-----------------------------------------------------------------------------
     }
 }

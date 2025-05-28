@@ -59,35 +59,5 @@ namespace JewelGame.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Sprite_0002 {
-            get {
-                object obj = ResourceManager.GetObject("Sprite-0002", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Sprite_Outline_0001_sheet {
-            get {
-                object obj = ResourceManager.GetObject("Sprite-Outline-0001-sheet", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Sprite_Outline_0002_sheet {
-            get {
-                object obj = ResourceManager.GetObject("Sprite-Outline-0002-sheet", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

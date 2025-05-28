@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Project_JewelGame._Scripts
+namespace JewelGame._Scripts
 {
     public class DatabaseGame
     {
@@ -14,19 +15,31 @@ namespace Project_JewelGame._Scripts
         public class Data_tranDau
         {
             public int maTranDau;
+
+            public int kichCo;
+            public int thoiGian;
+
             public string tenNguoiChoi1;
+            public int hpNguoiChoi1;
+            public int giapNguoiChoi1;
+            public int noNguoiChoi1;
+            public int nangLuongNguoiChoi1;
+
             public string tenNguoiChoi2;
+            public int hpNguoiChoi2;
+            public int giapNguoiChoi2;
+            public int noNguoiChoi2;
+            public int nangLuongNguoiChoi2;
         }
         public class Data_jewel
         {
-            public int maTranDau;
             public int toaDoX;
             public int toaDoY;
             public int loaiJewel;
         }
-        public static List<Data_tranDau> GetData_ListTranDau()
+        public static DataTable GetDataTable_ListTranDau()
         {
-            var result = new List<Data_tranDau>();
+            var result = new DataTable();
             string query = "SELECT * FROM dbo.TranDau";
 
             try
@@ -34,20 +47,8 @@ namespace Project_JewelGame._Scripts
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (var cmd = new SqlCommand(query, conn))
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int key = reader.GetInt32(reader.GetOrdinal("maTranDau"));
-                            result.Add(new Data_tranDau()
-                            {
-                                maTranDau = Convert.ToInt32(reader["maTranDau"]),
-                                tenNguoiChoi1 = Convert.ToString(reader["tenNguoiChoi1"]),
-                                tenNguoiChoi2 = Convert.ToString(reader["tenNguoiChoi2"]),
-                            });
-                        }
-                    }
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    adapter.Fill(result);
                 }
             }
             catch (Exception ex)
@@ -57,11 +58,12 @@ namespace Project_JewelGame._Scripts
 
             return result;
         }
-        public static Data_tranDau GetData_TranDau(int MaTranDau)
+        public static DataTable GetDataTable_Jewels( int MaTranDau)
         {
-            var result = new Data_tranDau();
-            string query = "SELECT * FROM dbo.TranDau " +
-                        "WHERE maTranDau = @maTranDau";
+            var result = new DataTable();
+
+            string query = @"SELECT * FROM dbo.Jewel
+                             WHERE maTranDau = @maTranDau";
 
             try
             {
@@ -71,16 +73,14 @@ namespace Project_JewelGame._Scripts
                     using (var cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@maTranDau", MaTranDau);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            reader.Read();
 
-                            result.maTranDau = Convert.ToInt32(reader["maTranDau"]);
-                            result.tenNguoiChoi1 = Convert.ToString(reader["tenNguoiChoi1"]);
-                            result.tenNguoiChoi2 = Convert.ToString(reader["tenNguoiChoi2"]);
+                        using (var adapter = new SqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(result);
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -89,75 +89,56 @@ namespace Project_JewelGame._Scripts
 
             return result;
         }
-        public static List<Data_jewel> GetData_JewelGrid(int MaTranDau)
+        public static void InsertData(Data_tranDau newData, DataTable newJewels)
         {
-            var result = new List<Data_jewel>();
+            string query_tranDau = @"INSERT INTO dbo.TranDau ( thoiGian, kichCo,
+                                        tenNguoiChoi1, hpNguoiChoi1, giapNguoiChoi1, noNguoiChoi1, nangLuongNguoiChoi1,
+                                        tenNguoiChoi2, hpNguoiChoi2, giapNguoiChoi2, noNguoiChoi2, nangLuongNguoiChoi2
+                                        )
+                                    OUTPUT INSERTED.maTranDau
+                                    VALUES ( @thoiGian, @kichCo,
+                                        @tenNguoiChoi1, @hpNguoiChoi1, @giapNguoiChoi1, @noNguoiChoi1, @nangLuongNguoiChoi1,
+                                        @tenNguoiChoi2, @hpNguoiChoi2, @giapNguoiChoi2, @noNguoiChoi2, @nangLuongNguoiChoi2
+                                    )";
 
-            string query = "SELECT * FROM dbo.Jewel " +
-                            "WHERE maTranDau = @maTranDau";
+            string query_jewel = @"INSERT INTO dbo.Jewel (maTranDau, toaDoX, toaDoY, loaiJewel)
+                                    VALUES (@maTranDau, @toaDoX, @toaDoY, @loaiJewel)";
 
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    using (var cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@maTranDau", MaTranDau);
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                result.Add(new Data_jewel
-                                {
-                                    maTranDau = Convert.ToInt32(reader["maTranDau"]),
-                                    toaDoX = Convert.ToInt32(reader["toaDoX"]),
-                                    toaDoY = Convert.ToInt32(reader["toaDoY"]),
-                                    loaiJewel = Convert.ToInt32(reader["loaiJewel"]),
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
-            }
+                    int maTranDauMoiTao;
 
-            return result;
-        }
-
-        public static void InsertData(Data_tranDau newData, List<DatabaseGame.Data_jewel> newJewels)
-        {
-            string query_tranDau = "INSERT INTO dbo.TranDau (tenNguoiChoi1, tenNguoiChoi2) " +
-                                   "OUTPUT INSERTED.maTranDau " +
-                                   "VALUES (@tenNguoiChoi1, @tenNguoiChoi2)";
-            string query_jewel = "INSERT INTO dbo.Jewel (maTranDau, toaDoX, toaDoY, loaiJewel) " +
-                                 "VALUES (@maTranDau, @toaDoX, @toaDoY, @loaiJewel)";
-
-            try
-            {
-                using (var conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-                    int maTranDau;
                     using (var cmd = new SqlCommand(query_tranDau, conn))
                     {
-                        cmd.Parameters.AddWithValue("@tenNguoiChoi1", newData.tenNguoiChoi1);
-                        cmd.Parameters.AddWithValue("@tenNguoiChoi2", newData.tenNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@thoiGian", newData.thoiGian);
+                        cmd.Parameters.AddWithValue("@kichCo", newData.kichCo);
 
-                        maTranDau = (int)cmd.ExecuteScalar();
+                        cmd.Parameters.AddWithValue("@tenNguoiChoi1", newData.tenNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@hpNguoiChoi1", newData.hpNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@giapNguoiChoi1", newData.giapNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@noNguoiChoi1", newData.noNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@nangLuongNguoiChoi1", newData.nangLuongNguoiChoi1);
+
+                        cmd.Parameters.AddWithValue("@tenNguoiChoi2", newData.tenNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@hpNguoiChoi2", newData.hpNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@giapNguoiChoi2", newData.giapNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@noNguoiChoi2", newData.noNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@nangLuongNguoiChoi2", newData.nangLuongNguoiChoi2);
+
+                        maTranDauMoiTao = (int)cmd.ExecuteScalar(); // Lấy khóa chính được sinh ra
                     }
 
-                    foreach (var jewel in newJewels)
+                    foreach (DataRow dataRow in newJewels.Rows)
                     {
                         using (var cmd = new SqlCommand(query_jewel, conn))
                         {
-                            cmd.Parameters.AddWithValue("@maTranDau", maTranDau);
-                            cmd.Parameters.AddWithValue("@toaDoX", jewel.toaDoX);
-                            cmd.Parameters.AddWithValue("@toaDoY", jewel.toaDoY);
-                            cmd.Parameters.AddWithValue("@loaiJewel", jewel.loaiJewel); // fallback nếu null
+                            cmd.Parameters.AddWithValue("@maTranDau", maTranDauMoiTao);
+                            cmd.Parameters.AddWithValue("@toaDoX", dataRow["toaDoX"]);
+                            cmd.Parameters.AddWithValue("@toaDoY", dataRow["toaDoY"]);
+                            cmd.Parameters.AddWithValue("@loaiJewel", dataRow["loaiJewel"]);
 
                             cmd.ExecuteNonQuery();
                         }
@@ -169,15 +150,130 @@ namespace Project_JewelGame._Scripts
                 MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
             }
         }
+        public static void UpdateData(Data_tranDau newData, DataTable newJewels)
+        {
+            string query_tranDau = @"UPDATE dbo.TranDau
+                                    SET 
+                                        thoiGian = @thoiGian,
+                                        tenNguoiChoi1 = @tenNguoiChoi1,
+                                        hpNguoiChoi1 = @hpNguoiChoi1,
+                                        giapNguoiChoi1 = @giapNguoiChoi1,
+                                        noNguoiChoi1 = @noNguoiChoi1,
+                                        nangLuongNguoiChoi1 = @nangLuongNguoiChoi1,
+                                        tenNguoiChoi2 = @tenNguoiChoi2,
+                                        hpNguoiChoi2 = @hpNguoiChoi2,
+                                        giapNguoiChoi2 = @giapNguoiChoi2,
+                                        noNguoiChoi2 = @noNguoiChoi2,
+                                        nangLuongNguoiChoi2 = @nangLuongNguoiChoi2
+                                    WHERE 
+                                        maTranDau = @maTranDau";
+
+            string query_jewel = @"UPDATE dbo.Jewel 
+                                    SET
+                                        loaiJewel = @loaiJewel
+                                    WHERE
+                                        maTranDau = @maTranDau AND toaDoX = @toaDoX AND toaDoY = @toaDoY";
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    int maTranDau = newData.maTranDau;
+
+                    using (var cmd = new SqlCommand(query_tranDau, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@maTranDau", newData.maTranDau);
+                        cmd.Parameters.AddWithValue("@thoiGian", newData.thoiGian);
+
+                        cmd.Parameters.AddWithValue("@tenNguoiChoi1", newData.tenNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@hpNguoiChoi1", newData.hpNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@giapNguoiChoi1", newData.giapNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@noNguoiChoi1", newData.noNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@nangLuongNguoiChoi1", newData.nangLuongNguoiChoi1);
+
+                        cmd.Parameters.AddWithValue("@tenNguoiChoi2", newData.tenNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@hpNguoiChoi2", newData.hpNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@giapNguoiChoi2", newData.giapNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@noNguoiChoi2", newData.noNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@nangLuongNguoiChoi2", newData.nangLuongNguoiChoi2);
+
+                        if (cmd.ExecuteNonQuery() == 0) MessageBox.Show("Lỗi khi cập nhật lại dữ liệu của trận đấu");
+                    }
+
+                    foreach (DataRow dataRow in newJewels.Rows)
+                    {
+                        using (var cmd = new SqlCommand(query_jewel, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@toaDoX", dataRow["toaDoX"]);
+                            cmd.Parameters.AddWithValue("@toaDoY", dataRow["toaDoY"]);
+                            cmd.Parameters.AddWithValue("@loaiJewel", dataRow["loaiJewel"]);
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
+            }
+        }
+        //----------------------------------------------------------
+        public static Data_tranDau GetData_TranDau(int MaTranDau)
+        {
+            var result = new Data_tranDau();
+            string query = @"SELECT * FROM dbo.TranDau
+                            WHERE maTranDau = @maTranDau";
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@maTranDau", MaTranDau);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result.maTranDau = Convert.ToInt32(reader["maTranDau"]);
+                                result.thoiGian = Convert.ToInt32(reader["thoiGian"]);
+                                result.kichCo = Convert.ToInt32(reader["kichCo"]);
+
+                                result.tenNguoiChoi1 = Convert.ToString(reader["tenNguoiChoi1"]);
+                                result.hpNguoiChoi1 = Convert.ToInt32(reader["hpNguoiChoi1"]);
+                                result.giapNguoiChoi1 = Convert.ToInt32(reader["giapNguoiChoi1"]);
+                                result.noNguoiChoi1 = Convert.ToInt32(reader["noNguoiChoi1"]);
+                                result.nangLuongNguoiChoi1 = Convert.ToInt32(reader["nangLuongNguoiChoi1"]);
+
+                                result.tenNguoiChoi2 = Convert.ToString(reader["tenNguoiChoi2"]);
+                                result.hpNguoiChoi2 = Convert.ToInt32(reader["hpNguoiChoi2"]);
+                                result.giapNguoiChoi2 = Convert.ToInt32(reader["giapNguoiChoi2"]);
+                                result.noNguoiChoi2 = Convert.ToInt32(reader["noNguoiChoi2"]);
+                                result.nangLuongNguoiChoi2 = Convert.ToInt32(reader["nangLuongNguoiChoi2"]);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải dữ liệu trận đấu từ SQL: " + ex.Message);
+            }
+
+            return result;
+        }
 
         public static void DeleteData(int maTranDau)
         {
             var result = new Data_tranDau();
 
-            string query_tranDau = "DELETE FROM dbo.TranDau " +
-                            "WHERE maTranDau = @maTranDau";
-            string query_jewel = "DELETE FROM dbo.Jewel " +
-                            "WHERE maTranDau = @maTranDau";
+            string query_tranDau = @"DELETE FROM dbo.TranDau
+                                    WHERE maTranDau = @maTranDau";
+            string query_jewel = @"DELETE FROM dbo.Jewel
+                                    WHERE maTranDau = @maTranDau";
             try
             {
                 using (var conn = new SqlConnection(connectionString))

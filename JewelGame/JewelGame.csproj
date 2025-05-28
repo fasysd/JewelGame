@@ -60,13 +60,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="_scripts\DatabaseGame.cs" />
     <Compile Include="_scripts\JewelGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="_scripts\JewelTile.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="_scripts\JewelTile.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -75,14 +78,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -97,14 +95,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\Sprite-0001.png" />
-    <Content Include="resources\Sprite-0002.png" />
-    <Content Include="resources\Sprite-0003.png" />
-    <Content Include="resources\Sprite-0004.png" />
-    <Content Include="resources\Sprite-0005.png" />
-    <Content Include="resources\Sprite-0006.png" />
-    <None Include="resources\Sprite-Outline-0002-sheet.png" />
-    <None Include="resources\Sprite-Outline-0001-sheet.png" />
+    <Content Include="resources\animation_Outline1\SpriteOutline_1_1.png" />
+    <Content Include="resources\animation_Outline1\SpriteOutline_1_2.png" />
+    <Content Include="resources\animation_Outline1\SpriteOutline_1_3.png" />
+    <Content Include="resources\animation_Outline1\SpriteOutline_1_4.png" />
+    <Content Include="resources\animation_Outline2\SpriteOutline_2_1.png" />
+    <Content Include="resources\animation_Outline2\SpriteOutline_2_2.png" />
+    <Content Include="resources\animation_Outline2\SpriteOutline_2_3.png" />
+    <Content Include="resources\animation_Outline2\SpriteOutline_2_4.png" />
+    <Content Include="resources\ArmorJewel\armorJewel.png" />
+    <Content Include="resources\AttackJewel\attackJewel.png" />
+    <Content Include="resources\BuffJewel\buffJewel.png" />
+    <Content Include="resources\ControlJewel\controlJewel.png" />
+    <Content Include="resources\HealJewel\healJewel.png" />
+    <Content Include="resources\SpriteOutline_1.png" />
+    <Content Include="resources\SpriteOutline_2.png" />
+    <Content Include="resources\SpriteJewel_1.png" />
+    <Content Include="resources\SpriteJewel_2.png" />
+    <Content Include="resources\SpriteJewel_3.png" />
+    <Content Include="resources\SpriteJewel_4.png" />
+    <Content Include="resources\SpriteJewel_5.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
