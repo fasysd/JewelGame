@@ -26,8 +26,8 @@ namespace JewelGame._Scripts
             _animationTimer.Start();
 
             string basePath_ImageOutline1 = Path.Combine(Application.StartupPath, "..\\..\\Resources\\animation_Outline1");
-            _Image_Outline = new Image[2,4];
-            for (int i = 0; i < 4; i++)
+            _Image_Outline = new Image[2,8];
+            for (int i = 0; i < 8; i++)
             {
                 string path = Path.Combine(basePath_ImageOutline1, $"SpriteOutline_1_{i + 1}.png");
                 if (!File.Exists(path))
@@ -36,7 +36,7 @@ namespace JewelGame._Scripts
             }
 
             string basePath_ImageOutline2 = Path.Combine(Application.StartupPath, "..\\..\\Resources\\animation_Outline2");
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 string path = Path.Combine(basePath_ImageOutline2, $"SpriteOutline_2_{i + 1}.png");
                 if (!File.Exists(path))
@@ -45,12 +45,12 @@ namespace JewelGame._Scripts
             }
 
             string basePath_ImageJewel = Path.Combine(Application.StartupPath, "..\\..\\Resources");
-            _Image_Jewels = new Image[JewelTile._NumberOftype, 1];
+            _Image_Jewels = new Image[JewelTile._NumberOftype, 2];
             for (int i = 0; i < JewelTile._NumberOftype; i++)
             {
-                for (int j = 0; j < 1; j++)
+                for (int j = 0; j < 2; j++)
                 {
-                    string path = Path.Combine(basePath_ImageJewel, $"SpriteJewel_{i + 1}.png");
+                    string path = Path.Combine(basePath_ImageJewel, $"SpriteJewel_{i + 1}_{ j + 1}.png");
                     if (!File.Exists(path))
                         throw new FileNotFoundException($"Không tìm thấy file ảnh: {path}");
                     _Image_Jewels[i, j] = Image.FromFile(path);
@@ -69,23 +69,32 @@ namespace JewelGame._Scripts
         //-----------------------------------------------------------------------------
         public void _Set_SelectTile()
         {
-            _JewelTile.BackgroundImage = _Image_Outline[0, timer % 4];
+            _JewelTile.BackgroundImage = _Image_Outline[0, timer % 8];
             _animationTimer.Tick += _animation_SelectTile;
         }
         public void _Unset_SelectTile()
         {
             _animationTimer.Tick -= _animation_SelectTile;
+            _JewelTile.Image = _Image_Jewels[_JewelTile.Type, 0];
             _JewelTile.BackgroundImage = null;
         }
         private void _animation_SelectTile(object sender, EventArgs e)
         {
-            _JewelTile.BackgroundImage = _Image_Outline[0, timer % 4];
+            _JewelTile.BackgroundImage = _Image_Outline[0, timer % 8];
         }
-
+        //-----------------------------------------------------------------------------
+        public void _Set_IsMatched()
+        {
+            _JewelTile.Image = _Image_Jewels[_JewelTile.Type, 1];
+        }
+        public void _Unset_IsMatched()
+        {
+            _JewelTile.Image = _Image_Jewels[_JewelTile.Type, 0];
+        }
         //-----------------------------------------------------------------------------
         public void _Set_AdjacentTile()
         {
-            _JewelTile.BackgroundImage = _Image_Outline[1, timer % 4];
+            _JewelTile.BackgroundImage = _Image_Outline[1, timer % 8];
             _animationTimer.Tick += _animation_AdjacentTile;
         }
         public void _Unset_AdjacentTile()
@@ -95,7 +104,7 @@ namespace JewelGame._Scripts
         }
         private void _animation_AdjacentTile(object sender, EventArgs e)
         {
-            _JewelTile.BackgroundImage = _Image_Outline[1, timer % 4];
+            _JewelTile.BackgroundImage = _Image_Outline[1, timer % 8];
         }
         //-----------------------------------------------------------------------------
     }
@@ -133,6 +142,15 @@ namespace JewelGame._Scripts
         //-----------------------------------------------------------------------------
         public void _SelectTile() => _animation._Set_SelectTile();
         public void _DeselectTile() => _animation._Unset_SelectTile();
+        //-----------------------------------------------------------------------------
+        public void _IsMatched()
+        {
+            _animation._Set_IsMatched();
+        }
+        public void _IsNotMatched()
+        {
+            _animation._Unset_IsMatched();
+        }
         //-----------------------------------------------------------------------------
         public void _SetEmpty() => this._SetType(_EmptyType);
         public void _SetType(int newType)

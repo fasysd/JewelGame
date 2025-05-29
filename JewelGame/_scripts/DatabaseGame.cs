@@ -37,7 +37,7 @@ namespace JewelGame._Scripts
             public int toaDoY;
             public int loaiJewel;
         }
-        public static DataTable GetDataTable_ListTranDau()
+        public static DataTable GetDataTable_TranDau()
         {
             var result = new DataTable();
             string query = "SELECT * FROM dbo.TranDau";
@@ -53,7 +53,7 @@ namespace JewelGame._Scripts
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL: " + ex.Message);
+                MessageBox.Show("Lỗi khi tải dữ liệu TranDau từ SQL: " + ex.Message);
             }
 
             return result;
@@ -84,9 +84,8 @@ namespace JewelGame._Scripts
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL: " + ex.Message);
+                MessageBox.Show("Lỗi khi tải Jewel dữ liệu từ SQL: " + ex.Message);
             }
-
             return result;
         }
         public static Data_tranDau InsertData(Data_tranDau newData, DataTable newJewels)
@@ -148,7 +147,7 @@ namespace JewelGame._Scripts
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
+                MessageBox.Show("Lỗi khi thêm dữ liệu TranDau vào SQL: " + ex.Message);
             }
             return newData;
         }
@@ -181,8 +180,6 @@ namespace JewelGame._Scripts
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    int maTranDau = newData.maTranDau;
-
                     using (var cmd = new SqlCommand(query_tranDau, conn))
                     {
                         cmd.Parameters.AddWithValue("@maTranDau", newData.maTranDau);
@@ -207,18 +204,100 @@ namespace JewelGame._Scripts
                     {
                         using (var cmd = new SqlCommand(query_jewel, conn))
                         {
+                            cmd.Parameters.AddWithValue("@maTranDau", newData.maTranDau);
                             cmd.Parameters.AddWithValue("@toaDoX", dataRow["toaDoX"]);
                             cmd.Parameters.AddWithValue("@toaDoY", dataRow["toaDoY"]);
                             cmd.Parameters.AddWithValue("@loaiJewel", dataRow["loaiJewel"]);
 
-                            cmd.ExecuteNonQuery();
+                            if (cmd.ExecuteNonQuery() == 0) MessageBox.Show("Lỗi khi cập nhật lại dữ liệu của jewel");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
+                MessageBox.Show("Lỗi khi cập nhật dữ liệu TranDau vào SQL: " + ex.Message);
+            }
+        }
+        public static void UpdateData_TranDau(Data_tranDau newData)
+        {
+            string query_tranDau = @"UPDATE dbo.TranDau
+                                    SET 
+                                        thoiGian = @thoiGian,
+                                        tenNguoiChoi1 = @tenNguoiChoi1,
+                                        hpNguoiChoi1 = @hpNguoiChoi1,
+                                        giapNguoiChoi1 = @giapNguoiChoi1,
+                                        noNguoiChoi1 = @noNguoiChoi1,
+                                        nangLuongNguoiChoi1 = @nangLuongNguoiChoi1,
+                                        tenNguoiChoi2 = @tenNguoiChoi2,
+                                        hpNguoiChoi2 = @hpNguoiChoi2,
+                                        giapNguoiChoi2 = @giapNguoiChoi2,
+                                        noNguoiChoi2 = @noNguoiChoi2,
+                                        nangLuongNguoiChoi2 = @nangLuongNguoiChoi2
+                                    WHERE 
+                                        maTranDau = @maTranDau";
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    using (var cmd = new SqlCommand(query_tranDau, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@maTranDau", newData.maTranDau);
+                        cmd.Parameters.AddWithValue("@thoiGian", newData.thoiGian);
+
+                        cmd.Parameters.AddWithValue("@tenNguoiChoi1", newData.tenNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@hpNguoiChoi1", newData.hpNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@giapNguoiChoi1", newData.giapNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@noNguoiChoi1", newData.noNguoiChoi1);
+                        cmd.Parameters.AddWithValue("@nangLuongNguoiChoi1", newData.nangLuongNguoiChoi1);
+
+                        cmd.Parameters.AddWithValue("@tenNguoiChoi2", newData.tenNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@hpNguoiChoi2", newData.hpNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@giapNguoiChoi2", newData.giapNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@noNguoiChoi2", newData.noNguoiChoi2);
+                        cmd.Parameters.AddWithValue("@nangLuongNguoiChoi2", newData.nangLuongNguoiChoi2);
+
+                        if (cmd.ExecuteNonQuery() == 0) MessageBox.Show("Lỗi khi cập nhật dữ liệu Jewel vào SQL");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật dữ liệu Jewel vào SQL: " + ex.Message);
+            }
+        }
+        public static void UpdateData_Jewel(int maTranDau, DataTable newJewels)
+        {
+            string query_jewel = @"UPDATE dbo.Jewel 
+                                    SET
+                                        loaiJewel = @loaiJewel
+                                    WHERE
+                                        maTranDau = @maTranDau AND toaDoX = @toaDoX AND toaDoY = @toaDoY";
+
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    foreach (DataRow dataRow in newJewels.Rows)
+                    {
+                        using (var cmd = new SqlCommand(query_jewel, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@maTranDau", maTranDau);
+                            cmd.Parameters.AddWithValue("@toaDoX", dataRow["toaDoX"]);
+                            cmd.Parameters.AddWithValue("@toaDoY", dataRow["toaDoY"]);
+                            cmd.Parameters.AddWithValue("@loaiJewel", dataRow["loaiJewel"]);
+
+                            if (cmd.ExecuteNonQuery() == 0) MessageBox.Show("Lỗi khi cập nhật lại dữ liệu của jewel");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi cập nhật dữ liệu TranDau vào SQL: " + ex.Message);
             }
         }
         //----------------------------------------------------------
@@ -262,7 +341,7 @@ namespace JewelGame._Scripts
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu trận đấu từ SQL: " + ex.Message);
+                MessageBox.Show("Lỗi khi tải dữ liệu TranDau từ SQL: " + ex.Message);
             }
 
             return result;
@@ -299,7 +378,7 @@ namespace JewelGame._Scripts
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu từ SQL Jewels: " + ex.Message);
+                MessageBox.Show("Lỗi khi xóa dữ liệu TranDau từ SQL: " + ex.Message);
             }
         }
     }

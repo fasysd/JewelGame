@@ -31,7 +31,6 @@ namespace JewelGame
             pictureBox_jewel.Image = this._jewelTile.Image;
             label_toaDoX.Text = "X: " + (this._jewelTile.X + 1);
             label_toaDoY.Text = "Y: " + (this._jewelTile.Y + 1);
-
         }
     }
 }

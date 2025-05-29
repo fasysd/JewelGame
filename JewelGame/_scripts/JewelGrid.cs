@@ -32,70 +32,15 @@ namespace JewelGame._Scripts
 
         public JewelGrid( int GridCount)
         {
-            _gridCount = GridCount;
-            _grid = new JewelTile[_gridCount, _gridCount];
-
-            this.RowCount = _gridCount;
-            this.ColumnCount = _gridCount;
-            for (int i = 0; i < _gridCount; i++)
-            {
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
-                this.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
-            }
-            _setAutoSize();
-
-            for (int rowX = 0; rowX < _gridCount; rowX++)
-            {
-                for (int columnY = 0; columnY < _gridCount; columnY++)
-                {
-                    JewelTile tile = new JewelTile
-                    {
-                        Point = new Point( rowX, columnY ),
-                        Type = JewelTile._GetRandomType(),
-                    };
-                    tile._Render();
-                    tile.Click += _clickJewel;
-                    tile.DoubleClick += _doubleClickJewel;
-
-                    _grid[tile.X, tile.Y] = tile;
-                    this.Controls.Add(tile, tile.X, tile.Y);
-                }
-            }
-
+            _setTablePanel(GridCount);
+            _setGrid();
             _resolveJewelGrid(). //Xử lý bảng
                 ContinueWith(task =>{});
         }
         public JewelGrid(int GridCount, DataTable Jewels)
         {
-            _gridCount = GridCount;
-            _grid = new JewelTile[_gridCount, _gridCount];
-
-            this.RowCount = _gridCount;
-            this.ColumnCount = _gridCount;
-            for (int i = 0; i < _gridCount; i++)
-            {
-                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
-                this.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
-            }
-            _setAutoSize();
-
-            for (int rowX = 0; rowX < _gridCount; rowX++)
-            {
-                for (int columnY = 0; columnY < _gridCount; columnY++)
-                {
-                    JewelTile tile = new JewelTile
-                    {
-                        Point = new Point(rowX, columnY),
-                        Type = JewelTile._EmptyType,
-                    };
-                    tile._Render();
-                    tile.Click += _clickJewel;
-                    tile.DoubleClick += _doubleClickJewel;
-
-                    _grid[tile.X, tile.Y] = tile;
-                    this.Controls.Add(tile, tile.X, tile.Y);
-                }
-            }
+            _setTablePanel(GridCount);
+            _setGrid();
             try
             {
                 var rows = Jewels.Rows;
@@ -113,7 +58,6 @@ namespace JewelGame._Scripts
             {
                 MessageBox.Show("Lỗi khi đọc dữ liệu từ DataTable: " + ex.Message);
             }
-
             _resolveJewelGrid(). //Xử lý bảng
                 ContinueWith(task => { });
         }
@@ -135,6 +79,104 @@ namespace JewelGame._Scripts
             return result;
         }
         //-----------------------------------------------------------------------------
+        private void _setAutoSize()
+        {
+            this.ParentChanged += (sender, e) =>
+            {
+                //Căn chỉnh size hình vuông khi form thay đổi kích cỡ
+                if (this.Parent != null)
+                {
+                    Size _gridSize_ = this.Parent.Height > this.Parent.Width
+                        ? new Size(this.Parent.Width, this.Parent.Width)
+                        : new Size(this.Parent.Height, this.Parent.Height);
+                    if (_gridSize_.Height % _gridCount != 0)
+                    {
+                        int excessLength = _gridSize_.Height % _gridCount;
+                        _gridSize_ = new Size(_gridSize_.Height - excessLength, _gridSize_.Height - excessLength);
+                    }
+                    this.Size = _gridSize_;
+
+                    this.Location = new Point(
+                        (this.Parent.Width - this.Width) / 2,
+                        (this.Parent.Size.Height - this.Height) / 2
+                        );
+
+                    this.Parent.SizeChanged += (sender_, e_) =>
+                    {
+                        if( this.Parent == null) return;
+
+                        Size _gridSize = this.Parent.Height > this.Parent.Width
+                            ? new Size(this.Parent.Width, this.Parent.Width)
+                            : new Size(this.Parent.Height, this.Parent.Height);
+                        if (_gridSize.Height % _gridCount != 0)
+                        {
+                            int excessLength = _gridSize.Height % _gridCount;
+                            _gridSize = new Size(_gridSize.Height - excessLength, _gridSize.Height - excessLength);
+                        }
+                        this.Size = _gridSize;
+
+                        this.Location = new Point(
+                            (this.Parent.Width - this.Width) / 2,
+                            (this.Parent.Size.Height - this.Height) / 2
+                            );
+                    };
+                }
+            };
+        }
+        private void _setTablePanel(int GridCount)
+        {
+            _gridCount = GridCount;
+            _grid = new JewelTile[_gridCount, _gridCount];
+
+            this.RowCount = _gridCount;
+            this.ColumnCount = _gridCount;
+            for (int i = 0; i < _gridCount; i++)
+            {
+                this.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+                this.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
+            }
+            _setAutoSize();
+        }
+        private void _setGrid()
+        {
+            for (int rowX = 0; rowX < _gridCount; rowX++)
+            {
+                for (int columnY = 0; columnY < _gridCount; columnY++)
+                {
+                    JewelTile tile = new JewelTile
+                    {
+                        Point = new Point(rowX, columnY),
+                        Type = JewelTile._GetRandomType(),
+                    };
+                    tile._Render();
+                    tile.Click += _clickJewel;
+
+                    _grid[tile.X, tile.Y] = tile;
+                    this.Controls.Add(tile, tile.X, tile.Y);
+                }
+            }
+            _addContextMenuForJewel();
+        }
+        private void _addContextMenuForJewel()
+        {
+            ContextMenuStrip contextMenuStrip_xemThongTinJewel = new ContextMenuStrip();
+            ToolStripMenuItem xemThôngTinToolStripMenuItem = new ToolStripMenuItem();
+
+            contextMenuStrip_xemThongTinJewel.ImageScalingSize = new System.Drawing.Size(20, 20);
+            contextMenuStrip_xemThongTinJewel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                    xemThôngTinToolStripMenuItem});
+            contextMenuStrip_xemThongTinJewel.Size = new System.Drawing.Size(211, 56);
+
+            xemThôngTinToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            xemThôngTinToolStripMenuItem.Text = "Xem thông tin";
+            xemThôngTinToolStripMenuItem.Click += _toolMenuStripClick_xemThongTin;
+
+            foreach (var item in _grid)
+            {
+                item.ContextMenuStrip = contextMenuStrip_xemThongTinJewel;
+            }
+        }
+        //_____________________________________________________________________________
         private void _clickJewel(object sender, EventArgs e)
         {
             JewelTile clickTile = sender as JewelTile;
@@ -167,23 +209,24 @@ namespace JewelGame._Scripts
                             _OnEndTurn?.Invoke(task.Result);//Tổng kết Jewel thu thập được
                         });
                 }
-
                 _firstJewel._DeselectTile();
                 if (_firstJewel.X + 1 != _gridCount) _grid[_firstJewel.X + 1, _firstJewel.Y]?._NonAdjacentTile();
                 if (_firstJewel.X - 1 != -1) _grid[_firstJewel.X - 1, _firstJewel.Y]?._NonAdjacentTile();
                 if (_firstJewel.Y + 1 != _gridCount) _grid[_firstJewel.X, _firstJewel.Y + 1]?._NonAdjacentTile();
                 if (_firstJewel.Y - 1 != -1) _grid[_firstJewel.X, _firstJewel.Y - 1]?._NonAdjacentTile();
-                _firstJewel = null;//Thiết lập lại ô được chọn
+                this._firstJewel = null;
             }
         }
-        private void _doubleClickJewel(object sender, EventArgs e)
+        private void _toolMenuStripClick_xemThongTin(object sender, EventArgs e)
         {
-            JewelTile clickTile = sender as JewelTile;
-            if (clickTile == null | !_canInteract) return;
+            ToolStripMenuItem toolStripMenuItem = sender as ToolStripMenuItem;
+            ContextMenuStrip contextMenuStrip = toolStripMenuItem?.Owner as ContextMenuStrip;
+            JewelTile sourceControl = contextMenuStrip?.SourceControl as JewelTile;
+            if (sourceControl == null | !_canInteract) return;
 
             //Mở 1 dialog để xem thông tin
             FormXemThongTinJewel formXemThongTinJewel = new FormXemThongTinJewel();
-            formXemThongTinJewel._SetJewelTile(clickTile);
+            formXemThongTinJewel._SetJewelTile(sourceControl);
             formXemThongTinJewel.ShowDialog();
         }
         //-----------------------------------------------------------------------------
@@ -192,32 +235,33 @@ namespace JewelGame._Scripts
             //Bắt đầu lượt
             _canInteract = false;// không thế tương tác với bảng
 
-            int[] result = new int[ JewelTile._NumberOftype];//index là Type của jewel, value là số lượng jewel loại index thu thập được
-            List<JewelTile> listPoints = _findMatches();// danh sách bộ ba tìm được
-            while (listPoints.Count > 0)//Có bộ 3
+            int[] result = new int[ JewelTile._NumberOftype];
+            List<JewelTile> listPoints = _findMatches();
+            while (listPoints.Count > 0)
             {
-                foreach (var item in listPoints)//Chuyển các bộ 3 thành ô trống
+                await Task.Delay(100);
+                foreach (var item in listPoints)
                 {
                     result[item.Type] += 1;
                     item._SetEmpty();
                 }
+
                 do
                 {
-                    await Task.Delay(200);
+                    await Task.Delay(100);
                 }
-                while (_updateJewelGrid() != 0);//Lặp lại đến khi các ô bị đẩy xuống hết và không còn ô trống
+                while (_updateJewelGrid() != 0);
 
-                listPoints = _findMatches();//Kiểm tra bộ 3 lại lần nữa
+                listPoints = _findMatches();
             }
 
             //Kết thúc lượt
-            _canInteract = true; // Có thể tương tác lại với bảng
+            _canInteract = true;
             return result;
         }
 
         private List<JewelTile> _findMatches()
         {
-            //Lưu các jewel thu thập được;
             HashSet<JewelTile> points = new HashSet<JewelTile>();
             for (int rowX = 0; rowX < _gridCount; rowX++)
             {
@@ -266,35 +310,5 @@ namespace JewelGame._Scripts
             return numberOfBlackTiles;
         }
         //-----------------------------------------------------------------------------
-        private void _setAutoSize()
-        {
-            this.ParentChanged += (sender, e) =>
-            {
-                if (this.Parent != null)
-                {
-                    //Căn chỉnh size hình vuông khi form thay đổi kích cỡ
-                    this.Size = this.Parent.Height > this.Parent.Width
-                        ? new Size(this.Parent.Width, this.Parent.Width)
-                        : new Size(this.Parent.Height, this.Parent.Height);
-
-                    this.Location = new Point(
-                        (this.Parent.Width - this.Width) / 2,
-                        (this.Parent.Size.Height - this.Height) / 2
-                        );
-
-                    this.Parent.SizeChanged += (sender_, e_) =>
-                    {
-                        this.Size = this.Parent.Height > this.Parent.Width
-                            ? new Size(this.Parent.Width, this.Parent.Width)
-                            : new Size(this.Parent.Height, this.Parent.Height);
-
-                        this.Location = new Point(
-                            (this.Parent.Width - this.Width) / 2,
-                            (this.Parent.Size.Height - this.Height) / 2
-                            );
-                    };
-                }
-            };
-        }
     }
 }
