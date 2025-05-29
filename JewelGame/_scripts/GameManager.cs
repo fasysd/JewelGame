@@ -84,10 +84,12 @@ namespace JewelGame._Scripts
                 if (_isPlayer1Turn && _player1.isControl)
                 {
                     _player1.isControl = false;
+                    MessageBox.Show(_player1.Name.TrimEnd() + " bị khống chế, không thể hành động");
                 }
                 else if (!_isPlayer1Turn && _player2.isControl)
                 {
                     _player2.isControl = false;
+                    MessageBox.Show(_player1.Name.TrimEnd() + " bị khống chế, không thể hành động");
                 }
                 else
                 {
@@ -107,7 +109,6 @@ namespace JewelGame._Scripts
                 else if (_player2.IsDefeated())
                 {
                     MessageBox.Show(_player1.Name + " chiến thắng!");
-
                     Application.Exit();
                     return;
                 }

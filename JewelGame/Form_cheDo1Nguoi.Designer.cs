@@ -29,10 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel_JewelGrid = new System.Windows.Forms.Panel();
+            this.contextMenuStrip_xemThongTinJewel = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.xemThôngTinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label_tongDiem = new System.Windows.Forms.Label();
             this.tableLayoutPanel_jewelTile = new System.Windows.Forms.TableLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label_jewelTileView1 = new System.Windows.Forms.Label();
@@ -45,9 +44,13 @@
             this.label_jewelTileView3 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.label_jewelTileView4 = new System.Windows.Forms.Label();
-            this.contextMenuStrip_xemThongTinJewel = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.xemThôngTinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.label_tongDiem = new System.Windows.Forms.Label();
+            this.panel_JewelGrid = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.label_diem = new System.Windows.Forms.Label();
+            this.label_tenNguoiChoi = new System.Windows.Forms.Label();
+            this.contextMenuStrip_xemThongTinJewel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel_jewelTile.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -55,54 +58,32 @@
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             this.panel7.SuspendLayout();
-            this.contextMenuStrip_xemThongTinJewel.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel8.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // contextMenuStrip_xemThongTinJewel
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Controls.Add(this.panel_JewelGrid, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 12);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(974, 660);
-            this.tableLayoutPanel1.TabIndex = 3;
+            this.contextMenuStrip_xemThongTinJewel.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip_xemThongTinJewel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xemThôngTinToolStripMenuItem});
+            this.contextMenuStrip_xemThongTinJewel.Name = "contextMenuStrip_xemThongTinJewel";
+            this.contextMenuStrip_xemThongTinJewel.Size = new System.Drawing.Size(173, 28);
             // 
-            // panel_JewelGrid
+            // xemThôngTinToolStripMenuItem
             // 
-            this.panel_JewelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_JewelGrid.Location = new System.Drawing.Point(194, 0);
-            this.panel_JewelGrid.Margin = new System.Windows.Forms.Padding(0);
-            this.panel_JewelGrid.Name = "panel_JewelGrid";
-            this.panel_JewelGrid.Size = new System.Drawing.Size(584, 660);
-            this.panel_JewelGrid.TabIndex = 1;
+            this.xemThôngTinToolStripMenuItem.Name = "xemThôngTinToolStripMenuItem";
+            this.xemThôngTinToolStripMenuItem.Size = new System.Drawing.Size(172, 24);
+            this.xemThôngTinToolStripMenuItem.Text = "Xem thông tin";
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label_tongDiem);
             this.panel1.Controls.Add(this.tableLayoutPanel_jewelTile);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(781, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(190, 654);
             this.panel1.TabIndex = 2;
-            // 
-            // label_tongDiem
-            // 
-            this.label_tongDiem.AutoSize = true;
-            this.label_tongDiem.Location = new System.Drawing.Point(45, 407);
-            this.label_tongDiem.Name = "label_tongDiem";
-            this.label_tongDiem.Size = new System.Drawing.Size(72, 16);
-            this.label_tongDiem.TabIndex = 4;
-            this.label_tongDiem.Text = "Tổng điểm";
             // 
             // tableLayoutPanel_jewelTile
             // 
@@ -233,19 +214,75 @@
             this.label_jewelTileView4.Text = "0";
             this.label_jewelTileView4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // contextMenuStrip_xemThongTinJewel
+            // label_tongDiem
             // 
-            this.contextMenuStrip_xemThongTinJewel.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip_xemThongTinJewel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.xemThôngTinToolStripMenuItem});
-            this.contextMenuStrip_xemThongTinJewel.Name = "contextMenuStrip_xemThongTinJewel";
-            this.contextMenuStrip_xemThongTinJewel.Size = new System.Drawing.Size(173, 28);
+            this.label_tongDiem.AutoSize = true;
+            this.label_tongDiem.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tongDiem.Location = new System.Drawing.Point(9, 214);
+            this.label_tongDiem.Name = "label_tongDiem";
+            this.label_tongDiem.Size = new System.Drawing.Size(157, 32);
+            this.label_tongDiem.TabIndex = 4;
+            this.label_tongDiem.Text = "Tổng điểm";
             // 
-            // xemThôngTinToolStripMenuItem
+            // panel_JewelGrid
             // 
-            this.xemThôngTinToolStripMenuItem.Name = "xemThôngTinToolStripMenuItem";
-            this.xemThôngTinToolStripMenuItem.Size = new System.Drawing.Size(172, 24);
-            this.xemThôngTinToolStripMenuItem.Text = "Xem thông tin";
+            this.panel_JewelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_JewelGrid.Location = new System.Drawing.Point(194, 0);
+            this.panel_JewelGrid.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_JewelGrid.Name = "panel_JewelGrid";
+            this.panel_JewelGrid.Size = new System.Drawing.Size(584, 660);
+            this.panel_JewelGrid.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.panel_JewelGrid, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel1, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.panel8, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 12);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(974, 660);
+            this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.label_diem);
+            this.panel8.Controls.Add(this.label_tenNguoiChoi);
+            this.panel8.Controls.Add(this.label_tongDiem);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel8.Location = new System.Drawing.Point(3, 3);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(188, 654);
+            this.panel8.TabIndex = 3;
+            // 
+            // label_diem
+            // 
+            this.label_diem.AutoSize = true;
+            this.label_diem.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_diem.ForeColor = System.Drawing.Color.Red;
+            this.label_diem.Location = new System.Drawing.Point(54, 259);
+            this.label_diem.Name = "label_diem";
+            this.label_diem.Size = new System.Drawing.Size(31, 32);
+            this.label_diem.TabIndex = 6;
+            this.label_diem.Text = "0";
+            // 
+            // label_tenNguoiChoi
+            // 
+            this.label_tenNguoiChoi.AutoSize = true;
+            this.label_tenNguoiChoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_tenNguoiChoi.Location = new System.Drawing.Point(35, 149);
+            this.label_tenNguoiChoi.Name = "label_tenNguoiChoi";
+            this.label_tenNguoiChoi.Size = new System.Drawing.Size(108, 29);
+            this.label_tenNguoiChoi.TabIndex = 5;
+            this.label_tenNguoiChoi.Text = "Player 1";
             // 
             // Form_cheDo1Nguoi
             // 
@@ -257,9 +294,8 @@
             this.Text = "GAME BEJEWELED";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_cheDo1Nguoi_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.contextMenuStrip_xemThongTinJewel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.tableLayoutPanel_jewelTile.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
@@ -271,16 +307,16 @@
             this.panel6.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
-            this.contextMenuStrip_xemThongTinJewel.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_xemThongTinJewel;
         private System.Windows.Forms.ToolStripMenuItem xemThôngTinToolStripMenuItem;
-        private System.Windows.Forms.Panel panel_JewelGrid;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_jewelTile;
         private System.Windows.Forms.Panel panel4;
@@ -295,6 +331,11 @@
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Label label_jewelTileView4;
         private System.Windows.Forms.Label label_tongDiem;
+        private System.Windows.Forms.Panel panel_JewelGrid;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.Label label_diem;
+        private System.Windows.Forms.Label label_tenNguoiChoi;
     }
 }
 

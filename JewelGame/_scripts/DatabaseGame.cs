@@ -71,12 +71,12 @@ namespace JewelGame._Scripts
             row["luotNguoiChoi"] = true;
 
             row["tenNguoiChoi1"] = "Player 1 không có tên";
-            row["hpNguoiChoi1"] = 0;
+            row["hpNguoiChoi1"] = 100;
             row["giapNguoiChoi1"] = 0;
-            row["nangLuongNguoiChoi1"] = 1;
+            row["nangLuongNguoiChoi1"] = 0;
 
             row["tenNguoiChoi2"] = "Player 2 không có tên";
-            row["hpNguoiChoi2"] = 0;
+            row["hpNguoiChoi2"] = 100;
             row["giapNguoiChoi2"] = 0;
             row["nangLuongNguoiChoi2"] = 0;
 
@@ -425,7 +425,11 @@ namespace JewelGame._Scripts
         }
         public static void UpdateData_tranDau2Nguoi(DataRow dataRow_tranDau2Nguoi, DataTable dataTable_jewel)
         {
-
+            if (dataRow_tranDau2Nguoi == null)
+            {
+                MessageBox.Show("Không có dữ liệu TranDau để cập nhật.");
+                return;
+            }
             string query_tranDau = @"UPDATE dbo.TranDau
                             SET 
                                 thoiGian = @thoiGian,
@@ -433,7 +437,7 @@ namespace JewelGame._Scripts
                                 cheDoChoi = @cheDoChoi
                             WHERE 
                                 maTranDau = @maTranDau";
-            string query_tranDau_2Nguoi = @"UPDATE dbo.TranDau
+            string query_tranDau_2Nguoi = @"UPDATE dbo.TranDau_2Nguoi
                                    SET 
                                        luotNguoiChoi = @luotNguoiChoi,
                                        tenNguoiChoi1 = @tenNguoiChoi1,

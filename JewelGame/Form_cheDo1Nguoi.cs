@@ -9,8 +9,8 @@ namespace JewelGame
 {
     public partial class Form_cheDo1Nguoi : Form
     {
-        JewelGrid jewelGrid;
         DataRow thongTinTranDau;
+        JewelGrid jewelGrid;
         List<Label> _listLabel_jewelTileView;
         public Form_cheDo1Nguoi()
         {
@@ -29,11 +29,19 @@ namespace JewelGame
                 tableLayoutPanel_jewelTile.Controls.Add( tile, 0, i);
             }
         }
-
-        private void Form1_Load(object sender, EventArgs e)
+        public void _SetData( DataRow data)
         {
-            thongTinTranDau = DatabaseGame.GetDataRow_TranDau1Nguoi(1);
-            jewelGrid = new JewelGrid(Convert.ToInt32(thongTinTranDau["kichCo"]),DatabaseGame.GetDataTable_Jewels(Convert.ToInt32(thongTinTranDau["maTranDau"])));
+            thongTinTranDau = data;
+            if (Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
+            {
+                jewelGrid = new JewelGrid(Convert.ToInt32(thongTinTranDau["kichCo"]), DatabaseGame.GetDataTable_Jewels(Convert.ToInt32(thongTinTranDau["maTranDau"])));
+                panel_JewelGrid.Controls.Add(jewelGrid);
+            }
+            else
+            {
+                jewelGrid = new JewelGrid(Convert.ToInt32(thongTinTranDau["kichCo"]));
+                panel_JewelGrid.Controls.Add(jewelGrid);
+            }
             jewelGrid._OnCollectJewels += (jewels) =>
             {
                 for (int i = 0; i < jewels.Length; i++)
@@ -61,15 +69,26 @@ namespace JewelGame
                         diemSo += jewels[i];
                     }
                     thongTinTranDau["diemSo"] = diemSo;
-                    label_tongDiem.Text = thongTinTranDau["diemSo"].ToString();
+                    label_diem.Text = thongTinTranDau["diemSo"].ToString();
                 }));
             };
             panel_JewelGrid.Controls.Add(jewelGrid);
+            label_diem.Text = thongTinTranDau["diemSo"].ToString();
         }
-
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
+        }
         private void Form_cheDo1Nguoi_FormClosed(object sender, FormClosedEventArgs e)
         {
-            DatabaseGame.UpdateData_tranDau1Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
+            if(Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
+            {
+                DatabaseGame.UpdateData_tranDau1Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
+            }
+            else
+            {
+                DatabaseGame.InsertData_tranDau1Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
+            }
         }
     }
 }
