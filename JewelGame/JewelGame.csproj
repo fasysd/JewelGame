@@ -46,17 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormXemThongTinJewel.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormXemThongTinJewel.Designer.cs">
       <DependentUpon>FormXemThongTinJewel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_cheDo1Nguoi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_cheDo1Nguoi.Designer.cs">
+      <DependentUpon>Form_cheDo1Nguoi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_cheDo2Nguoi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_cheDo2Nguoi.Designer.cs">
+      <DependentUpon>Form_cheDo2Nguoi.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,15 +72,21 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="_scripts\DatabaseGame.cs" />
+    <Compile Include="_scripts\GameContext.cs" />
+    <Compile Include="_scripts\GameManager.cs" />
     <Compile Include="_scripts\JewelGrid.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="_scripts\JewelTile.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="_scripts\Player .cs" />
     <EmbeddedResource Include="FormXemThongTinJewel.resx">
       <DependentUpon>FormXemThongTinJewel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_cheDo1Nguoi.resx">
+      <DependentUpon>Form_cheDo1Nguoi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_cheDo2Nguoi.resx">
+      <DependentUpon>Form_cheDo2Nguoi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

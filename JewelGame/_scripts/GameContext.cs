@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace JewelGame._scripts
+namespace JewelGame._Scripts
 {
     public static class GameContext
     {
@@ -14,15 +14,20 @@ namespace JewelGame._scripts
 
         public static ProgressBar Player1HPBar { get; set; }
         public static ProgressBar Player2HPBar { get; set; }
-        public static Label player1Name { get; set; }
-        public static Label player2Name { get; set; } 
-        public static void Init(Player p1, Player p2, ProgressBar p1HPBar, ProgressBar p2HPBar)
+        public static Panel Player1Sbar { get; set; }
+        public static Panel Player2Sbar { get; set; }
+        public static Panel Player1Cbar { get; set; }
+        public static Panel Player2Cbar { get; set; }
+        public static void Init( ProgressBar p1HPBar, ProgressBar p2HPBar, Panel Sp1 , Panel Sp2, Panel Cp1, Panel Cp2)
         {
-            Player1 = p1;
-            Player2 = p2;
-          
+            Player1 = new Player();
+            Player2 = new Player();
             Player1HPBar = p1HPBar;
             Player2HPBar = p2HPBar;
+            Player1Sbar = Sp1;
+            Player2Sbar = Sp2;
+            Player1Cbar = Cp1;
+            Player2Cbar = Cp2;
         }
     }
 }

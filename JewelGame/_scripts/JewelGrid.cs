@@ -19,6 +19,7 @@ namespace JewelGame._Scripts
         public int _GridCount => this._gridCount;
         public event Action _OnStartTurn;
         public event Action<int[]> _OnEndTurn;
+        public event Action<int[]> _OnCollectJewels;
         //-----------------------------------------------------------------------------
         //-
         //Dữ liệu bảng jewel
@@ -239,12 +240,15 @@ namespace JewelGame._Scripts
             List<JewelTile> listPoints = _findMatches();
             while (listPoints.Count > 0)
             {
+                int[] numberOfJewelIsCollectes = new int[JewelTile._NumberOftype];
                 await Task.Delay(100);
                 foreach (var item in listPoints)
                 {
                     result[item.Type] += 1;
+                    numberOfJewelIsCollectes[item.Type] += 1;
                     item._SetEmpty();
                 }
+                _OnCollectJewels?.Invoke(numberOfJewelIsCollectes);
 
                 do
                 {
