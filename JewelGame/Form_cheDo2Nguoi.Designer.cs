@@ -264,7 +264,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form_cheDo2Nguoi";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "GAME BEJEWELED - CHẾ ĐỘ 2 NGƯỜI";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_cheDo2Nguoi_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);

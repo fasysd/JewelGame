@@ -5,21 +5,20 @@ using System.Windows.Forms;
 
 namespace JewelGame
 {
-    public partial class Form2 : Form
+    public partial class FormMenu : Form
     {
-        int maTranDauDuocChon = 0;
+        int maTranDauDuocChon = -1;
         bool cheDoChoiDuocChon => rd1nguoi.Checked;
         int kichCoDuocChon;
 
         DataRow tranDau1NguoiDuocChon;
         DataRow tranDau2NguoiDuocChon;
 
-        public Form2()
+        public FormMenu()
         {
             InitializeComponent();
             cbKichCo.SelectedIndex = 0;
             updateDataSoure();
-
         }
 
         private void rd1nguoi_CheckedChanged(object sender, EventArgs e)
@@ -42,7 +41,12 @@ namespace JewelGame
 
         private void cbKichCo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            kichCoDuocChon = Convert.ToInt32(cbKichCo.Text[0].ToString());
+            switch(cbKichCo.Text)
+            {
+                case ("8x8"): kichCoDuocChon = 8; break;
+                case ("10x10"): kichCoDuocChon = 10; break;
+                case ("12x12"): kichCoDuocChon = 12; break;
+            }
         }
 
         private void dgv1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -71,7 +75,7 @@ namespace JewelGame
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
                 var rowItem = dgv1.Rows[i];
-                bool cheDoChoi = rowItem.Cells["cheDoChoi"].Value.ToString()[0] == '0';
+                bool cheDoChoi = rowItem.Cells["cheDoChoi"].Value.ToString().TrimEnd() == "1 Player";
                 if(cheDoChoi)
                 {
                     rowItem.Cells["cheDoChoi"].Value = "1 người";
@@ -109,12 +113,13 @@ namespace JewelGame
         }
         private void btnTiepTuc_Click(object sender, EventArgs e)
         {
+            if( maTranDauDuocChon == -1) return;
             if (cheDoChoiDuocChon)
             {
                 if (txtTenNgChoi.Text != tranDau1NguoiDuocChon["tenNguoiChoi"].ToString().TrimEnd())
                 {
                     DialogResult result = MessageBox.Show(
-                                            "Bạn có chắc là muốn dùng tên mới không?",
+                                            "Bạn vừa thay đổi tên, bạn có muốn dùng tên mới không?",
                                             "Xác nhận hành động",
                                             MessageBoxButtons.YesNo,
                                             MessageBoxIcon.Question);
@@ -134,7 +139,7 @@ namespace JewelGame
                     | txtNgChoi2.Text != tranDau2NguoiDuocChon["tenNguoiChoi2"].ToString().TrimEnd())
                 {
                     DialogResult result = MessageBox.Show(
-                                            "Bạn có chắc là muốn dùng tên mới không?",
+                                            "Bạn vừa thay đổi tên, bạn có muốn dùng tên mới không?",
                                             "Xác nhận hành động",
                                             MessageBoxButtons.YesNo,
                                             MessageBoxIcon.Question);

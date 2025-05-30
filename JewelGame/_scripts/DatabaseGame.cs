@@ -15,8 +15,8 @@ namespace JewelGame._Scripts
             // Thêm cột của TranDau
             resultTable.Columns.Add("maTranDau", typeof(int));
             resultTable.Columns.Add("kichCo", typeof(int));
-            resultTable.Columns.Add("thoiGian", typeof(int));
-            resultTable.Columns.Add("cheDoChoi", typeof(int));
+            resultTable.Columns.Add("thoiGian", typeof(TimeSpan));
+            resultTable.Columns.Add("cheDoChoi", typeof(string));
 
             // Thêm cột của TranDau_1Nguoi
             resultTable.Columns.Add("maTranDau1Nguoi", typeof(int));
@@ -27,8 +27,8 @@ namespace JewelGame._Scripts
             //Giá trị mặc định
             row["maTranDau"] = -1;
             row["kichCo"] = 10;
-            row["thoiGian"] = 0;
-            row["cheDoChoi"] = 0;
+            row["thoiGian"] = new TimeSpan(0);
+            row["cheDoChoi"] = "1 Player";
 
             row["maTranDau1Nguoi"] = -1;
             row["diemSo"] = 0;
@@ -43,8 +43,8 @@ namespace JewelGame._Scripts
             // Thêm cột của TranDau
             resultTable.Columns.Add("maTranDau", typeof(int));
             resultTable.Columns.Add("kichCo", typeof(int));
-            resultTable.Columns.Add("thoiGian", typeof(int));
-            resultTable.Columns.Add("cheDoChoi", typeof(int));
+            resultTable.Columns.Add("thoiGian", typeof(TimeSpan));
+            resultTable.Columns.Add("cheDoChoi", typeof(string));
 
             // Thêm cột của TranDau_1Nguoi
             resultTable.Columns.Add("maTranDau2Nguoi", typeof(int));
@@ -64,8 +64,8 @@ namespace JewelGame._Scripts
             //Giá trị mặc định
             row["maTranDau"] = -1;
             row["kichCo"] = 10;
-            row["thoiGian"] = 0;
-            row["cheDoChoi"] = 1;
+            row["thoiGian"] = new TimeSpan(0);
+            row["cheDoChoi"] = "2 Player";
 
             row["maTranDau2Nguoi"] = -1;
             row["luotNguoiChoi"] = true;

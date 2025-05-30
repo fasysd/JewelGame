@@ -10,6 +10,8 @@ namespace JewelGame
 {
     public partial class Form_cheDo2Nguoi : Form
     {
+        TimeSpan timeSpan;
+        DateTime startTime;
         DataRow thongTinTranDau;
         JewelGrid jewelGrid;
         Player player1 => GameContext.Player1;
@@ -36,7 +38,6 @@ namespace JewelGame
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
-
             gameManager = new GameManager(jewelGrid);
             gameManager._isPlayer1Turn = Convert.ToBoolean(thongTinTranDau["luotNguoiChoi"]);
 
@@ -60,6 +61,7 @@ namespace JewelGame
             player1Name.Text = player1.Name;
             player2Name.Text = player2.Name;
 
+            MessageBox.Show("Bắt đầu trận đấu, đến lượt " + ( gameManager._isPlayer1Turn ? player1.Name : player2.Name));
             BeginInvoke((Action)(() =>
             {
                 if (player1.IsDefeated() | player2.IsDefeated())
@@ -87,9 +89,12 @@ namespace JewelGame
                 jewelGrid = new JewelGrid(Convert.ToInt32(thongTinTranDau["kichCo"]));
                 panel_JewelGrid.Controls.Add(jewelGrid);
             }
+            timeSpan = (TimeSpan)thongTinTranDau["thoiGian"];
+            startTime = DateTime.Now;
         }
         private void Form_cheDo2Nguoi_FormClosed(object sender, FormClosedEventArgs e)
         {
+            thongTinTranDau["thoiGian"] = timeSpan + (TimeSpan)(DateTime.Now - startTime);
             thongTinTranDau["luotNguoiChoi"] = gameManager.playerTurn();
             thongTinTranDau["hpNguoiChoi1"] = player1.HP;
             thongTinTranDau["giapNguoiChoi1"] = player1.Shield;

@@ -268,21 +268,23 @@
             this.label_diem.AutoSize = true;
             this.label_diem.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_diem.ForeColor = System.Drawing.Color.Red;
-            this.label_diem.Location = new System.Drawing.Point(54, 259);
+            this.label_diem.Location = new System.Drawing.Point(67, 259);
             this.label_diem.Name = "label_diem";
             this.label_diem.Size = new System.Drawing.Size(31, 32);
             this.label_diem.TabIndex = 6;
             this.label_diem.Text = "0";
+            this.label_diem.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_tenNguoiChoi
             // 
             this.label_tenNguoiChoi.AutoSize = true;
             this.label_tenNguoiChoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_tenNguoiChoi.Location = new System.Drawing.Point(35, 149);
+            this.label_tenNguoiChoi.Location = new System.Drawing.Point(29, 163);
             this.label_tenNguoiChoi.Name = "label_tenNguoiChoi";
-            this.label_tenNguoiChoi.Size = new System.Drawing.Size(108, 29);
+            this.label_tenNguoiChoi.Size = new System.Drawing.Size(87, 29);
             this.label_tenNguoiChoi.TabIndex = 5;
-            this.label_tenNguoiChoi.Text = "Player 1";
+            this.label_tenNguoiChoi.Text = "Player";
+            this.label_tenNguoiChoi.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form_cheDo1Nguoi
             // 
@@ -291,7 +293,7 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form_cheDo1Nguoi";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "GAME BEJEWELED";
+            this.Text = "GAME BEJEWELED - CHẾ ĐỘ 1 NGƯỜI";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form_cheDo1Nguoi_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip_xemThongTinJewel.ResumeLayout(false);

@@ -18,7 +18,7 @@ namespace JewelGame
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form_cheDo1Nguoi());
             //Application.Run(new Form_cheDo2Nguoi());
-            Application.Run(new Form2());
+            Application.Run(new FormMenu());
         }
     }
 }

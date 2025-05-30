@@ -9,13 +9,14 @@ namespace JewelGame
 {
     public partial class Form_cheDo1Nguoi : Form
     {
+        TimeSpan timeSpan;
+        DateTime startTime;
         DataRow thongTinTranDau;
         JewelGrid jewelGrid;
         List<Label> _listLabel_jewelTileView;
         public Form_cheDo1Nguoi()
         {
             InitializeComponent();
-
             _listLabel_jewelTileView = new List<Label>();
             _listLabel_jewelTileView.Add(label_jewelTileView0);
             _listLabel_jewelTileView.Add(label_jewelTileView1);
@@ -28,6 +29,10 @@ namespace JewelGame
                 tile._SetType(i);
                 tableLayoutPanel_jewelTile.Controls.Add( tile, 0, i);
             }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
         public void _SetData( DataRow data)
         {
@@ -73,15 +78,15 @@ namespace JewelGame
                 }));
             };
             panel_JewelGrid.Controls.Add(jewelGrid);
+            label_tenNguoiChoi.Text = thongTinTranDau["tenNguoiChoi"].ToString().TrimEnd();
             label_diem.Text = thongTinTranDau["diemSo"].ToString();
-        }
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            
+            timeSpan = (TimeSpan)thongTinTranDau["thoiGian"];
+            startTime = DateTime.Now;
         }
         private void Form_cheDo1Nguoi_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if(Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
+            thongTinTranDau["thoiGian"] = timeSpan + (TimeSpan)(DateTime.Now - startTime);
+            if (Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
             {
                 DatabaseGame.UpdateData_tranDau1Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
             }

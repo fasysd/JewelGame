@@ -1,6 +1,6 @@
 ﻿namespace JewelGame
 {
-    partial class Form2
+    partial class FormMenu
     {
         /// <summary>
         /// Required designer variable.
@@ -271,7 +271,7 @@
             // thoiGian
             // 
             this.thoiGian.DataPropertyName = "thoiGian";
-            this.thoiGian.HeaderText = "Thời gian";
+            this.thoiGian.HeaderText = "Thời gian chơi";
             this.thoiGian.MinimumWidth = 6;
             this.thoiGian.Name = "thoiGian";
             this.thoiGian.ReadOnly = true;
@@ -323,7 +323,7 @@
             this.btnTiepTuc.UseVisualStyleBackColor = true;
             this.btnTiepTuc.Click += new System.EventHandler(this.btnTiepTuc_Click);
             // 
-            // Form2
+            // FormMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -334,8 +334,8 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.btn_LichSu);
             this.Controls.Add(this.dgv1);
-            this.Name = "Form2";
-            this.Text = "FormMenu";
+            this.Name = "FormMenu";
+            this.Text = "GAME BEJEWELED - MENU";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
