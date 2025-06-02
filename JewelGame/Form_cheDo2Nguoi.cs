@@ -49,7 +49,6 @@ namespace JewelGame
         }
         private void Form1_Load(object sender, System.EventArgs e)
         {
-
             TimeCount();
             gameManager = new GameManager(jewelGrid);
             gameManager._isPlayer1Turn = Convert.ToBoolean(thongTinTranDau["luotNguoiChoi"]);

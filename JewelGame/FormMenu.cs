@@ -19,6 +19,7 @@ namespace JewelGame
             InitializeComponent();
             cbKichCo.SelectedIndex = 0;
             updateDataSoure();
+
         }
 
         private void rd1nguoi_CheckedChanged(object sender, EventArgs e)
@@ -114,9 +115,8 @@ namespace JewelGame
                     MessageBox.Show("Hãy điền đầy đủ thông tin!");
                     return;
                 }
-            
 
-                    DataRow newData = DatabaseGame.NewRow_TranDau2Nguoi();
+                DataRow newData = DatabaseGame.NewRow_TranDau2Nguoi();
                 newData["kichCo"] = kichCoDuocChon;
                 newData["tenNguoiChoi1"] = txtNgChoi1.Text;
                 newData["tenNguoiChoi2"] = txtNgChoi2.Text;
