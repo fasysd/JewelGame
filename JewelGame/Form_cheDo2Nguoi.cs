@@ -1,10 +1,8 @@
 ﻿using JewelGame._Scripts;
 using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace JewelGame
 {
@@ -14,45 +12,61 @@ namespace JewelGame
         DateTime startTime;
         DataRow thongTinTranDau;
         JewelGrid jewelGrid;
-        Player player1 => GameContext.Player1;
-        Player player2 => GameContext.Player2;
+        Player player1 = GameManager._player1;
+        Player player2 = GameManager._player2;
         GameManager gameManager;
+        private bool gameOff = false;
+        int a, b, c;
+        int i = 0;
         public Form_cheDo2Nguoi()
         {
             InitializeComponent();
-            GameContext.Init(Player1Health, Player2Health, player1SMana, player2SMana, Cp1, Cp2);
+
+            label7.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
+            a = this.ClientSize.Height;
         }
 
         private void Form1_Resize(object sender, System.EventArgs e)
         {
             if (thongTinTranDau == null) return;
-            player1SMana.Width = panel1.Width;
-            player2SMana.Width = panel4.Width;
-            Cp1.Width = panel2.Width;
-            Cp2.Width = panel2.Width;
-            gameManager.Update(player1SMana, player1.Shield);
-            gameManager.Update(player2SMana, player2.Shield);
-            gameManager.Update(Cp1, player1.controlMana);
-            gameManager.Update(Cp2, player2.controlMana);
-        }
 
+
+            label7.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
+            label8.Location = new System.Drawing.Point(this.ClientSize.Width / 21 + this.ClientSize.Width / 2, label7.Location.Y);
+            if (this.ClientSize.Height <= a + a / 2)
+            {
+                Lbresize(9);
+            }
+            else if (this.ClientSize.Height > a + a / 2)
+            {
+                Lbresize(15);
+            }
+            else if (this.ClientSize.Height > a * 2)
+            {
+                Lbresize(26);
+            }
+
+        }
         private void Form1_Load(object sender, System.EventArgs e)
         {
+
+            TimeCount();
             gameManager = new GameManager(jewelGrid);
             gameManager._isPlayer1Turn = Convert.ToBoolean(thongTinTranDau["luotNguoiChoi"]);
 
-            player1.Name = thongTinTranDau["tenNguoiChoi1"].ToString();
+            player1.Name = thongTinTranDau["tenNguoiChoi1"].ToString().TrimEnd();
             player1.HP = Convert.ToInt32(thongTinTranDau["hpNguoiChoi1"]);
             player1.Shield = Convert.ToInt32(thongTinTranDau["giapNguoiChoi1"]);
             player1.controlMana = Convert.ToInt32(thongTinTranDau["nangLuongNguoiChoi1"]);
 
-            player2.Name = thongTinTranDau["tenNguoiChoi2"].ToString();
+            player2.Name = thongTinTranDau["tenNguoiChoi2"].ToString().TrimEnd();
             player2.HP = Convert.ToInt32(thongTinTranDau["hpNguoiChoi2"]);
             player2.Shield = Convert.ToInt32(thongTinTranDau["giapNguoiChoi2"]);
             player2.controlMana = Convert.ToInt32(thongTinTranDau["nangLuongNguoiChoi2"]);
+            ///
 
             gameManager.Update(player1SMana, player1.Shield);
-            gameManager.Update(player1SMana, player2.Shield);
+            gameManager.Update(player2SMana, player2.Shield);
             gameManager.Update(Cp1, player1.controlMana);
             gameManager.Update(Cp2, player2.controlMana);
 
@@ -61,7 +75,7 @@ namespace JewelGame
             player1Name.Text = player1.Name;
             player2Name.Text = player2.Name;
 
-            MessageBox.Show("Bắt đầu trận đấu, đến lượt " + ( gameManager._isPlayer1Turn ? player1.Name : player2.Name));
+
             BeginInvoke((Action)(() =>
             {
                 if (player1.IsDefeated() | player2.IsDefeated())
@@ -71,12 +85,12 @@ namespace JewelGame
                                             "Thông báo",
                                             MessageBoxButtons.OK,
                                             MessageBoxIcon.Question);
-                     DatabaseGame.DeleteData(Convert.ToInt32(thongTinTranDau["maTranDau"]));
+                    DatabaseGame.DeleteData(Convert.ToInt32(thongTinTranDau["maTranDau"]));
                 }
             }));
         }
 
-        public void _SetData( DataRow data)
+        public void _SetData(DataRow data)
         {
             thongTinTranDau = data;
             if (Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
@@ -102,7 +116,6 @@ namespace JewelGame
             thongTinTranDau["hpNguoiChoi2"] = player2.HP;
             thongTinTranDau["giapNguoiChoi2"] = player2.Shield;
             thongTinTranDau["nangLuongNguoiChoi2"] = player2.controlMana;
-
             if (Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
             {
                 DatabaseGame.UpdateData_tranDau2Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
@@ -112,5 +125,117 @@ namespace JewelGame
                 DatabaseGame.InsertData_tranDau2Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
             }
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            TurnManager();
+            label1.Text = "HP: " + player1.HP.ToString() + "/100";
+            label2.Text = "HP: " + player2.HP.ToString() + "/100";
+            label3.Text = "Shield: " + player1.Shield.ToString();
+            label4.Text = "Shield: " + player2.Shield.ToString();
+            label5.Text = "Control: " + player1.controlMana.ToString();
+            label6.Text = "Control: " + player2.controlMana.ToString();
+
+            textDame();
+
+            Player1Health.Value = player1.HP;
+            Player2Health.Value = player2.HP;
+            gameManager.Update(player1SMana, player1.Shield);
+            gameManager.Update(player2SMana, player2.Shield);
+            gameManager.Update(Cp1, player1.controlMana);
+            gameManager.Update(Cp2, player2.controlMana);
+            if (player1.IsDefeated() && gameOff == false)
+            {
+                gameOff = true;
+                MessageBox.Show(player2.Name + " chiến thắng!");
+
+                return;
+
+            }
+            else if (player2.IsDefeated() && gameOff == false)
+            {
+                gameOff = true;
+                MessageBox.Show(player1.Name + " chiến thắng!");
+
+                return;
+            }
+        }
+
+        private async Task textDame()
+        {
+            if (player1.isDamage == true)
+            {
+
+                label7.Visible = true;
+                label7.Text = " - " + player1._damage.ToString();
+                for (int i = 0; i < 3; i++)
+                {
+
+                    label7.Top -= 1;
+                    await Task.Delay(500);
+                }
+
+                label7.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
+                player1.isDamage = false;
+                label7.Visible = false;
+
+
+            }
+            else if (player2.isDamage == true)
+            {
+                {
+                    label8.Visible = true;
+                    label8.Text = " - " + player2._damage.ToString();
+                    for (int i = 0; i < 3; i++)
+                    {
+
+                        label8.Top -= 1;
+                        await Task.Delay(500);
+                    }
+
+                    label8.Location = new System.Drawing.Point(this.ClientSize.Width / 3 + this.ClientSize.Width / 10, label7.Location.Y);
+                    player2.isDamage = false;
+                    label8.Visible = false;
+                }
+            }
+
+        }
+        private void TurnManager()
+        {
+            if (gameManager._isPlayer1Turn == true && GameManager.canClick == true)
+            {
+                pictureBox1.Visible = true;
+                pictureBox2.Visible = false;
+
+            }
+            else if (gameManager._isPlayer1Turn == false && GameManager.canClick == true)
+            {
+                pictureBox1.Visible = false;
+                pictureBox2.Visible = true;
+
+            }
+        }
+        private async Task TimeCount()
+        {
+            while (true)
+            {
+                label9.Text = i.ToString();
+                await Task.Delay(1000);
+                i++;
+            }
+        }
+        private void Lbresize(int a)
+        {
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", a * 2, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        }
+
     }
 }

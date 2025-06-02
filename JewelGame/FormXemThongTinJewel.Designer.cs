@@ -41,7 +41,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 18);
+            this.label1.Location = new System.Drawing.Point(13, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 16);
             this.label1.TabIndex = 1;
@@ -55,22 +55,21 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Location = new System.Drawing.Point(241, 30);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(224, 200);
+            this.panel2.Size = new System.Drawing.Size(298, 200);
             this.panel2.TabIndex = 2;
             // 
             // label_moTa
             // 
-            this.label_moTa.AutoSize = true;
-            this.label_moTa.Location = new System.Drawing.Point(16, 101);
+            this.label_moTa.Location = new System.Drawing.Point(16, 61);
             this.label_moTa.Name = "label_moTa";
-            this.label_moTa.Size = new System.Drawing.Size(46, 16);
+            this.label_moTa.Size = new System.Drawing.Size(266, 126);
             this.label_moTa.TabIndex = 4;
             this.label_moTa.Text = "Mô tả: ";
             // 
             // label_toaDoY
             // 
             this.label_toaDoY.AutoSize = true;
-            this.label_toaDoY.Location = new System.Drawing.Point(134, 47);
+            this.label_toaDoY.Location = new System.Drawing.Point(134, 37);
             this.label_toaDoY.Name = "label_toaDoY";
             this.label_toaDoY.Size = new System.Drawing.Size(29, 16);
             this.label_toaDoY.TabIndex = 3;
@@ -79,7 +78,7 @@
             // label_toaDoX
             // 
             this.label_toaDoX.AutoSize = true;
-            this.label_toaDoX.Location = new System.Drawing.Point(39, 47);
+            this.label_toaDoX.Location = new System.Drawing.Point(39, 37);
             this.label_toaDoX.Name = "label_toaDoX";
             this.label_toaDoX.Size = new System.Drawing.Size(28, 16);
             this.label_toaDoX.TabIndex = 2;
@@ -98,7 +97,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 245);
+            this.ClientSize = new System.Drawing.Size(551, 245);
             this.Controls.Add(this.pictureBox_jewel);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

@@ -78,7 +78,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="_scripts\DatabaseGame.cs" />
-    <Compile Include="_scripts\GameContext.cs" />
     <Compile Include="_scripts\GameManager.cs" />
     <Compile Include="_scripts\JewelGrid.cs">
       <SubType>Component</SubType>
@@ -136,6 +135,7 @@
     <Content Include="resources\SpriteJewel_3.png" />
     <Content Include="resources\SpriteJewel_4.png" />
     <Content Include="resources\SpriteJewel_5.png" />
+    <Content Include="resources\sticker-png-emoji-finger-index-finger-pointing-hand-yellow-orange-thumbnail.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

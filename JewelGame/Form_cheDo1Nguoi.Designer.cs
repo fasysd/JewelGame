@@ -289,6 +289,7 @@
             // Form_cheDo1Nguoi
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(255)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(975, 677);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form_cheDo1Nguoi";

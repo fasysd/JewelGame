@@ -111,6 +111,8 @@ namespace JewelGame._Scripts
     public partial class JewelTile : PictureBox
     {
         static private Random _random = new Random();
+        static private string[] _name;
+        static private string[] _description;
         //-----------------------------------------------------------------------------
         static public int _NumberOftype = 5;
         static public int _EmptyType = _NumberOftype;
@@ -121,9 +123,32 @@ namespace JewelGame._Scripts
         public int X => Point.X;
         public int Y => Point.Y;
         public int Type;
+        public string _NameJewel => _name[this.Type];
+        public string _Description => _description[this.Type];
         //-----------------------------------------------------------------------------
         private Animation_JewelTile _animation;
 
+        static JewelTile()
+        {
+            _name = new string[]
+            {
+                "Ngọc Sát Thương",
+                "Ngọc Sinh Mệnh",
+                "Ngọc Phòng Thủ",
+                "Ngọc Hỗn Hợp",
+                "Ngọc Khống Chế",
+                "Ngọc Vô Năng"
+            };
+            _description = new string[]
+            {
+                "Mỗi viên ngọc thu thập được sẽ khiến đối thủ mất 7 điểm máu.",
+                "Mỗi viên ngọc thu thập được sẽ hồi 7 điểm HP cho bản thân. Nếu đã đạt tối đa HP, sẽ không hồi điểm HP.",
+                "Mỗi viên ngọc thu thập được sẽ cộng thêm 1 điểm giáp cho bản thân. Khi tích lũy đủ 10 điểm giáp trở lên, toàn bộ điểm giáp sẽ bị tiêu hao để chặn một đòn tấn công của đối phương ( hiệu ứng này không thể cộng dồn nhiều lần).",
+                "Mỗi viên ngọc thu thập được sẽ khiến đối thủ mất 3 điểm máu và hồi cho bản thân 3 điểm HP, 0.5 điểm giáp và 0.5 điểm năng lượng.",
+                "Mỗi viên ngọc thu thập được sẽ cộng thêm 1 điểm năng lượng cho bản thân. Khi đạt 10 điểm năng lượng trở lên, toàn bộ năng lượng sẽ bị tiêu hao để khống chế đối thủ: đối phương sẽ mất lượt hành động kế tiếp ( hiệu ứng này không thể cộng dồn nhiều lần).",
+                "Viên ngọc này chưa có hiệu quả gì!!!"
+            };
+        }
         public JewelTile()
         {
             this.DoubleBuffered = true;

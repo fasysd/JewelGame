@@ -29,6 +29,7 @@ namespace JewelGame._Scripts
         //Dữ liệu tạm thời bảng jewel
         private JewelTile _firstJewel = null;//ô Jewel được chọn số 1
         private bool _canInteract = true;//trạng thái có thể swap các ô Jewel
+        private bool _canClickJewel = true;
         //-----------------------------------------------------------------------------
 
         public JewelGrid( int GridCount)
@@ -83,6 +84,8 @@ namespace JewelGame._Scripts
             }
             return result;
         }
+        public bool _Get_IsCanClickJewel() => this._canClickJewel;
+        public void _Set_CanClickJewel( bool CanClickJewel) => this._canClickJewel = CanClickJewel;
         //-----------------------------------------------------------------------------
         private void _setAutoSize()
         {
@@ -185,7 +188,7 @@ namespace JewelGame._Scripts
         private void _clickJewel(object sender, EventArgs e)
         {
             JewelTile clickTile = sender as JewelTile;
-            if (clickTile == null | !_canInteract) return;
+            if (clickTile == null | !_canInteract | !_canClickJewel) return;
             //Chọn ô thứ nhất
             if (_firstJewel == null)
             {

@@ -54,6 +54,8 @@ namespace JewelGame
             DataGridViewCellCollection clickCell = dgv1.Rows[dgv1.CurrentCell.RowIndex].Cells;
             maTranDauDuocChon = Convert.ToInt32(clickCell["maTranDau"].Value);
             btnTiepTuc.Text = "Tiếp tục trận số " + maTranDauDuocChon;
+            btnXoa.Text = "Xóa trận đấu số " + maTranDauDuocChon;
+
             if (clickCell["cheDoChoi"].Value.ToString() == "1 người")
             {
                 rd1nguoi.Checked = true;
@@ -91,6 +93,12 @@ namespace JewelGame
         {
             if(cheDoChoiDuocChon)
             {
+                if (txtTenNgChoi.TextLength == 0)
+                {
+                    MessageBox.Show("Hãy điền đầy đủ thông tin!");
+                    return;
+                }
+
                 DataRow newData = DatabaseGame.NewRow_TranDau1Nguoi();
                 newData["kichCo"] = kichCoDuocChon;
                 newData["tenNguoiChoi"] = txtTenNgChoi.Text;
@@ -101,7 +109,14 @@ namespace JewelGame
             }
             else
             {
-                DataRow newData = DatabaseGame.NewRow_TranDau2Nguoi();
+                if (txtNgChoi1.TextLength == 0 || txtNgChoi2.TextLength == 0)
+                {
+                    MessageBox.Show("Hãy điền đầy đủ thông tin!");
+                    return;
+                }
+            
+
+                    DataRow newData = DatabaseGame.NewRow_TranDau2Nguoi();
                 newData["kichCo"] = kichCoDuocChon;
                 newData["tenNguoiChoi1"] = txtNgChoi1.Text;
                 newData["tenNguoiChoi2"] = txtNgChoi2.Text;
@@ -109,6 +124,7 @@ namespace JewelGame
                 a._SetData(newData);
                 a.ShowDialog();
             }
+
             updateDataSoure();
         }
         private void btnTiepTuc_Click(object sender, EventArgs e)
@@ -155,6 +171,36 @@ namespace JewelGame
                 a.ShowDialog();
             }
             updateDataSoure();
+        }
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            if (maTranDauDuocChon == -1)
+            {
+                MessageBox.Show("Bạn chưa chọn trận đấu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(
+                "Bạn có chắc muốn xóa trận đấu số " + maTranDauDuocChon + " không?",
+                "Xác nhận xóa",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question
+                );
+            if (result == DialogResult.Yes)
+            {
+                DatabaseGame.DeleteData(maTranDauDuocChon);
+                updateDataSoure();
+            }
+        }
+
+        private void lbTenNgChoi_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNgChoi1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
