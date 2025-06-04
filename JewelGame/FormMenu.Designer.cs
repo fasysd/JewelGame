@@ -51,9 +51,9 @@
             this.cheDoChoi = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_LichSu = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.btnTiepTuc = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1.SuspendLayout();
             this.panel_form2Nguoi.SuspendLayout();
@@ -159,7 +159,6 @@
             this.txtNgChoi1.Name = "txtNgChoi1";
             this.txtNgChoi1.Size = new System.Drawing.Size(235, 22);
             this.txtNgChoi1.TabIndex = 16;
-            this.txtNgChoi1.TextChanged += new System.EventHandler(this.txtNgChoi1_TextChanged);
             // 
             // txtNgChoi2
             // 
@@ -206,7 +205,6 @@
             this.lbTenNgChoi.Size = new System.Drawing.Size(95, 16);
             this.lbTenNgChoi.TabIndex = 7;
             this.lbTenNgChoi.Text = "Tên người chơi";
-            this.lbTenNgChoi.Click += new System.EventHandler(this.lbTenNgChoi_Click);
             // 
             // txtTenNgChoi
             // 
@@ -300,7 +298,7 @@
             this.btn_LichSu.TabIndex = 8;
             this.btn_LichSu.Text = "Lịch sử ";
             this.btn_LichSu.UseVisualStyleBackColor = false;
-            this.btn_LichSu.Click += new System.EventHandler(this.btn1_Click);
+            this.btn_LichSu.Click += new System.EventHandler(this.btnLichSu_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -316,6 +314,18 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(795, 139);
             this.tableLayoutPanel1.TabIndex = 9;
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(193)))), ((int)(((byte)(255)))), ((int)(((byte)(193)))));
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.panel_form2Nguoi);
+            this.panel2.Controls.Add(this.panel_form1Nguoi);
+            this.panel2.Location = new System.Drawing.Point(335, 14);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(435, 110);
+            this.panel2.TabIndex = 6;
             // 
             // btnTiepTuc
             // 
@@ -347,18 +357,6 @@
             this.btnXoa.UseVisualStyleBackColor = false;
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
             // 
-            // panel2
-            // 
-            this.panel2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(193)))), ((int)(((byte)(255)))), ((int)(((byte)(193)))));
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.panel_form2Nguoi);
-            this.panel2.Controls.Add(this.panel_form1Nguoi);
-            this.panel2.Location = new System.Drawing.Point(335, 14);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(435, 110);
-            this.panel2.TabIndex = 6;
-            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -388,6 +386,7 @@
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.dgv1);
+            this.MinimumSize = new System.Drawing.Size(818, 497);
             this.Name = "FormMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GAME BEJEWELED - MENU";

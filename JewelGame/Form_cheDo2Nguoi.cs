@@ -1,6 +1,7 @@
 ﻿using JewelGame._Scripts;
 using System;
 using System.Data;
+using System.Reflection.Emit;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,12 +18,12 @@ namespace JewelGame
         GameManager gameManager;
         private bool gameOff = false;
         int a, b, c;
-        int i = 0;
+        int time = 0;
         public Form_cheDo2Nguoi()
         {
             InitializeComponent();
 
-            label7.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
+            textDamage_player1.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
             a = this.ClientSize.Height;
         }
 
@@ -31,8 +32,8 @@ namespace JewelGame
             if (thongTinTranDau == null) return;
 
 
-            label7.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
-            label8.Location = new System.Drawing.Point(this.ClientSize.Width / 21 + this.ClientSize.Width / 2, label7.Location.Y);
+            textDamage_player1.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
+            textDamage_player2.Location = new System.Drawing.Point(this.ClientSize.Width / 21 + this.ClientSize.Width / 2, textDamage_player1.Location.Y);
             if (this.ClientSize.Height <= a + a / 2)
             {
                 Lbresize(9);
@@ -52,6 +53,8 @@ namespace JewelGame
             TimeCount();
             gameManager = new GameManager(jewelGrid);
             gameManager._isPlayer1Turn = Convert.ToBoolean(thongTinTranDau["luotNguoiChoi"]);
+
+            time = Convert.ToInt32(((TimeSpan)thongTinTranDau["thoiGian"]).TotalSeconds);
 
             player1.Name = thongTinTranDau["tenNguoiChoi1"].ToString().TrimEnd();
             player1.HP = Convert.ToInt32(thongTinTranDau["hpNguoiChoi1"]);
@@ -73,20 +76,7 @@ namespace JewelGame
             Player2Health.Value = player2.HP;
             player1Name.Text = player1.Name;
             player2Name.Text = player2.Name;
-
-
-            BeginInvoke((Action)(() =>
-            {
-                if (player1.IsDefeated() | player2.IsDefeated())
-                {
-                    DialogResult result = MessageBox.Show(
-                                            "Trận đấu đã kết thúc, trận đấu này sẽ bị xóa!!!",
-                                            "Thông báo",
-                                            MessageBoxButtons.OK,
-                                            MessageBoxIcon.Question);
-                    DatabaseGame.DeleteData(Convert.ToInt32(thongTinTranDau["maTranDau"]));
-                }
-            }));
+            label_time.Text = time.ToString();
         }
 
         public void _SetData(DataRow data)
@@ -115,7 +105,11 @@ namespace JewelGame
             thongTinTranDau["hpNguoiChoi2"] = player2.HP;
             thongTinTranDau["giapNguoiChoi2"] = player2.Shield;
             thongTinTranDau["nangLuongNguoiChoi2"] = player2.controlMana;
-            if (Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
+            if( gameOff)
+            {
+                DatabaseGame.DeleteData(Convert.ToInt32(thongTinTranDau["maTranDau"]));
+            }
+            else if (Convert.ToInt32(thongTinTranDau["maTranDau"]) != -1)
             {
                 DatabaseGame.UpdateData_tranDau2Nguoi(thongTinTranDau, jewelGrid._GetDataTable_Jewels());
             }
@@ -128,12 +122,12 @@ namespace JewelGame
         private void timer1_Tick(object sender, EventArgs e)
         {
             TurnManager();
-            label1.Text = "HP: " + player1.HP.ToString() + "/100";
-            label2.Text = "HP: " + player2.HP.ToString() + "/100";
-            label3.Text = "Shield: " + player1.Shield.ToString();
-            label4.Text = "Shield: " + player2.Shield.ToString();
-            label5.Text = "Control: " + player1.controlMana.ToString();
-            label6.Text = "Control: " + player2.controlMana.ToString();
+            label_hpPlayer1.Text = "HP: " + player1.HP.ToString() + "/100";
+            label_hpPlayer2.Text = "HP: " + player2.HP.ToString() + "/100";
+            label_shieldPlayer1.Text = "Shield: " + player1.Shield.ToString();
+            label_shieldPlayer2.Text = "Shield: " + player2.Shield.ToString();
+            label_manaPlayer1.Text = "Control: " + player1.controlMana.ToString();
+            label_manaPlayer2.Text = "Control: " + player2.controlMana.ToString();
 
             textDame();
 
@@ -143,20 +137,16 @@ namespace JewelGame
             gameManager.Update(player2SMana, player2.Shield);
             gameManager.Update(Cp1, player1.controlMana);
             gameManager.Update(Cp2, player2.controlMana);
-            if (player1.IsDefeated() && gameOff == false)
+            if ((player1.IsDefeated() | player2.IsDefeated()) & gameOff == false)
             {
                 gameOff = true;
-                MessageBox.Show(player2.Name + " chiến thắng!");
-
-                return;
-
-            }
-            else if (player2.IsDefeated() && gameOff == false)
-            {
-                gameOff = true;
-                MessageBox.Show(player1.Name + " chiến thắng!");
-
-                return;
+                MessageBox.Show( ( player1.IsDefeated() ? player2.Name : player1.Name) + " chiến thắng!");
+                DialogResult result = MessageBox.Show(
+                                        "Trận đấu đã kết thúc, trận đấu này sẽ bị xóa!!!",
+                                        "Thông báo",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Question);
+                this.Close();
             }
         }
 
@@ -164,38 +154,37 @@ namespace JewelGame
         {
             if (player1.isDamage == true)
             {
-
-                label7.Visible = true;
-                label7.Text = " - " + player1._damage.ToString();
+                Control originParent = textDamage_player1.Parent;
+                textDamage_player1.Visible = true;
+                textDamage_player1.Text = " - " + player1._damage.ToString();
                 for (int i = 0; i < 3; i++)
                 {
 
-                    label7.Top -= 1;
+                    textDamage_player1.Top -= 1;
                     await Task.Delay(500);
                 }
 
-                label7.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
+                textDamage_player1.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - this.ClientSize.Height / 30);
                 player1.isDamage = false;
-                label7.Visible = false;
+                textDamage_player1.Visible = false;
 
 
             }
             else if (player2.isDamage == true)
             {
+                Control originParent = textDamage_player2.Parent;
+                textDamage_player2.Visible = true;
+                textDamage_player2.Text = " - " + player2._damage.ToString();
+                for (int i = 0; i < 3; i++)
                 {
-                    label8.Visible = true;
-                    label8.Text = " - " + player2._damage.ToString();
-                    for (int i = 0; i < 3; i++)
-                    {
 
-                        label8.Top -= 1;
-                        await Task.Delay(500);
-                    }
-
-                    label8.Location = new System.Drawing.Point(this.ClientSize.Width / 3 + this.ClientSize.Width / 10, label7.Location.Y);
-                    player2.isDamage = false;
-                    label8.Visible = false;
+                    textDamage_player2.Top -= 1;
+                    await Task.Delay(500);
                 }
+
+                textDamage_player2.Location = new System.Drawing.Point(this.ClientSize.Width / 3 + this.ClientSize.Width / 10, textDamage_player1.Location.Y);
+                player2.isDamage = false;
+                textDamage_player2.Visible = false;
             }
 
         }
@@ -218,22 +207,22 @@ namespace JewelGame
         {
             while (true)
             {
-                label9.Text = i.ToString();
+                label_time.Text = time.ToString();
                 await Task.Delay(1000);
-                i++;
+                time++;
             }
         }
         private void Lbresize(int a)
         {
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", a * 2, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_hpPlayer1.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_hpPlayer2.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_shieldPlayer1.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_shieldPlayer2.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_manaPlayer1.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_manaPlayer2.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textDamage_player1.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textDamage_player2.Font = new System.Drawing.Font("Microsoft Sans Serif", a, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_time.Font = new System.Drawing.Font("Microsoft Sans Serif", a * 2, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
 
     }

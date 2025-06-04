@@ -63,6 +63,16 @@ namespace JewelGame.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap klipartz_com {
+            get {
+                object obj = ResourceManager.GetObject("klipartz.com", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sticker_png_emoji_finger_index_finger_pointing_hand_yellow_orange_thumbnail {
             get {
                 object obj = ResourceManager.GetObject("sticker-png-emoji-finger-index-finger-pointing-hand-yellow-orange-thumbnail", resourceCulture);

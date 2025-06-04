@@ -10,7 +10,7 @@ namespace JewelGame._Scripts
 
     internal class GameManager
     {
-        private JewelGrid _jewelGrid;
+        public static JewelGrid _jewelGrid;
 
         public static Player _player1 = new Player();
         public static Player _player2 = new Player();
@@ -65,25 +65,23 @@ namespace JewelGame._Scripts
                 if (_isPlayer1Turn && _player1.isControl)
                 {
                     _player1.isControl = false;
-                    MessageBox.Show(_player1.Name.TrimEnd() + " bị khống chế, không thể hành động");
-                _player1.manageTimer();
+                    _player1.manageTimer();
             }
                 else if (!_isPlayer1Turn && _player2.isControl)
                 {
                     _player2.isControl = false;
-                    MessageBox.Show(_player1.Name.TrimEnd() + " bị khống chế, không thể hành động");
-                _player1.manageTimer();
+                    _player1.manageTimer();
             }
                 else 
                 {
                     _isPlayer1Turn = !_isPlayer1Turn;
-                _player1.manageTimer();
+                    _player1.manageTimer();
             }
 
             
 
             canClick = false;
-            
+            _jewelGrid._Set_CanClickJewel(canClick);
             
         }
         public void Update(Panel panelCover, int curentPanel)

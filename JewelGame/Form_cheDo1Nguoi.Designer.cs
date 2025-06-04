@@ -95,7 +95,7 @@
             this.tableLayoutPanel_jewelTile.Controls.Add(this.panel5, 1, 2);
             this.tableLayoutPanel_jewelTile.Controls.Add(this.panel6, 1, 3);
             this.tableLayoutPanel_jewelTile.Controls.Add(this.panel7, 1, 4);
-            this.tableLayoutPanel_jewelTile.Location = new System.Drawing.Point(48, 64);
+            this.tableLayoutPanel_jewelTile.Location = new System.Drawing.Point(41, 139);
             this.tableLayoutPanel_jewelTile.Name = "tableLayoutPanel_jewelTile";
             this.tableLayoutPanel_jewelTile.RowCount = 5;
             this.tableLayoutPanel_jewelTile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -117,6 +117,7 @@
             // 
             // label_jewelTileView1
             // 
+            this.label_jewelTileView1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_jewelTileView1.AutoSize = true;
             this.label_jewelTileView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_jewelTileView1.Location = new System.Drawing.Point(10, 9);
@@ -138,6 +139,7 @@
             // 
             // label_jewelTileView0
             // 
+            this.label_jewelTileView0.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_jewelTileView0.AutoSize = true;
             this.label_jewelTileView0.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_jewelTileView0.Location = new System.Drawing.Point(9, 10);
@@ -165,6 +167,7 @@
             // 
             // label_jewelTileView2
             // 
+            this.label_jewelTileView2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_jewelTileView2.AutoSize = true;
             this.label_jewelTileView2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_jewelTileView2.Location = new System.Drawing.Point(10, 9);
@@ -185,6 +188,7 @@
             // 
             // label_jewelTileView3
             // 
+            this.label_jewelTileView3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_jewelTileView3.AutoSize = true;
             this.label_jewelTileView3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_jewelTileView3.Location = new System.Drawing.Point(10, 9);
@@ -205,6 +209,7 @@
             // 
             // label_jewelTileView4
             // 
+            this.label_jewelTileView4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_jewelTileView4.AutoSize = true;
             this.label_jewelTileView4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_jewelTileView4.Location = new System.Drawing.Point(10, 10);

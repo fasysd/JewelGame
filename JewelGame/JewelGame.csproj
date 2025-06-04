@@ -128,6 +128,7 @@
     <Content Include="resources\BuffJewel\buffJewel.png" />
     <Content Include="resources\ControlJewel\controlJewel.png" />
     <Content Include="resources\HealJewel\healJewel.png" />
+    <Content Include="resources\klipartz.com.png" />
     <Content Include="resources\SpriteOutline_1.png" />
     <Content Include="resources\SpriteOutline_2.png" />
     <Content Include="resources\SpriteJewel_1.png" />

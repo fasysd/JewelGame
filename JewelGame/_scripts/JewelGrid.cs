@@ -62,10 +62,7 @@ namespace JewelGame._Scripts
             }
             _resolveJewelGrid(). //Xử lý bảng
                 ContinueWith(task => { });
-            while (_updateJewelGrid() != 0)
-            {
-
-            }
+            while (_updateJewelGrid() != 0) { }
         }
         //-----------------------------------------------------------------------------
         public DataTable _GetDataTable_Jewels()

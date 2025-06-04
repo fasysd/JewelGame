@@ -88,6 +88,7 @@ namespace JewelGame._Scripts
         {
             await Task.Delay(1000);
             GameManager .canClick = true ;
+            GameManager._jewelGrid._Set_CanClickJewel( GameManager.canClick);
         }
        
         public bool IsDefeated()

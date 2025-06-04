@@ -54,16 +54,6 @@ namespace JewelGame
                     _listLabel_jewelTileView[i].Text = (Convert.ToInt32(_listLabel_jewelTileView[i].Text) + jewels[i]).ToString();
                 }
             };
-            jewelGrid._OnStartTurn += () =>
-            {
-                this.Invoke(new Action(() =>
-                {
-                    for (int i = 0; i < _listLabel_jewelTileView.Count; i++)
-                    {
-                        _listLabel_jewelTileView[i].Text = "0";
-                    }
-                }));
-            };
             jewelGrid._OnEndTurn += (jewels) =>
             {
                 this.Invoke(new Action(() =>

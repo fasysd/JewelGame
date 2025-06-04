@@ -19,7 +19,6 @@ namespace JewelGame
             InitializeComponent();
             cbKichCo.SelectedIndex = 0;
             updateDataSoure();
-
         }
 
         private void rd1nguoi_CheckedChanged(object sender, EventArgs e)
@@ -34,7 +33,7 @@ namespace JewelGame
             panel_form2Nguoi.Show();
         }
 
-        private void btn1_Click(object sender, EventArgs e)
+        private void btnLichSu_Click(object sender, EventArgs e)
         {
             if (dgv1.Visible) dgv1.Hide();
             else dgv1.Show();
@@ -52,6 +51,7 @@ namespace JewelGame
 
         private void dgv1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (dgv1.Rows.Count == 0) return;
             DataGridViewCellCollection clickCell = dgv1.Rows[dgv1.CurrentCell.RowIndex].Cells;
             maTranDauDuocChon = Convert.ToInt32(clickCell["maTranDau"].Value);
             btnTiepTuc.Text = "Tiếp tục trận số " + maTranDauDuocChon;
@@ -191,16 +191,6 @@ namespace JewelGame
                 DatabaseGame.DeleteData(maTranDauDuocChon);
                 updateDataSoure();
             }
-        }
-
-        private void lbTenNgChoi_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtNgChoi1_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
